@@ -21,3 +21,12 @@ sokonaut/
 ├── README.md
 └── requirements.txt
 ```
+
+
+
+WIP
+
+levelinayton linkit
+pisteet
+highscore
+pisteiden tallennus
