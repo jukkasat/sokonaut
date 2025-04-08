@@ -13,9 +13,6 @@ class GameState:
         # Update dimensions when loading new map
         self._update_dimensions()
 
-        # self.height = len(self.map)
-        # self.width = len(self.map[0])
-
     def _update_dimensions(self):
         # Update map dimensions after loading a new level
         self.height = len(self.map)
@@ -54,6 +51,11 @@ class GameState:
         
     def move(self, move_y, move_x):
         """Move the robot and handle interactions with the environment"""
+
+        # Check if level is won - prevent movement if true
+        if self.level_won():
+            return
+        
         # Find robot position
         robot_pos = self.find_robo()
         if not robot_pos:

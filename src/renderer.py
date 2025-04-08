@@ -73,18 +73,17 @@ class Renderer:
         # Draw UI elements below the game field
         ui_y = self.offset_y + (self.game_state.height * self.tile_size) + 10
         
-        # Display the move counter and game instructions
-        text = self.font.render(f"Moves: {self.game_state.moves}", True, (210, 105, 30))
+        text = self.font.render(f"Level: {self.game_state.current_level}", True, (200, 200, 200))
         self.display.blit(text, (25, ui_y))
+        
+        text = self.font.render(f"Moves: {self.game_state.moves}", True, (210, 105, 30))
+        self.display.blit(text, (150, ui_y))
 
         text = self.font.render("F2 = Main menu", True, (200, 200, 200))
-        self.display.blit(text, (200, ui_y))
+        self.display.blit(text, (300, ui_y))
 
         text = self.font.render("F3 = Restart Level", True, (200, 200, 200))
-        self.display.blit(text, (400, ui_y))
-
-        text = self.font.render("Esc = Close game", True, (200, 200, 200))
-        self.display.blit(text, (620, ui_y))
+        self.display.blit(text, (500, ui_y))
 
 
         # Check if all levels are completed
@@ -114,12 +113,12 @@ class Renderer:
             self.display.blit(text, (text_x, text_y))
 
             # Draw options text
-            restart_text = self.font.render("Press F2 to Play Again", True, (200, 200, 200))
+            restart_text = self.font.render("F2 to Main menu", True, (200, 200, 200))
             restart_x = self.display.get_width() // 2 - restart_text.get_width() // 2
             restart_y = text_y + text.get_height() + 20
             self.display.blit(restart_text, (restart_x, restart_y))
 
-            quit_text = self.font.render("Press ESC to Quit", True, (200, 200, 200))
+            quit_text = self.font.render("ESC to exit the game", True, (200, 200, 200))
             quit_x = self.display.get_width() // 2 - quit_text.get_width() // 2
             quit_y = restart_y + restart_text.get_height() + 20
             self.display.blit(quit_text, (quit_x, quit_y))
