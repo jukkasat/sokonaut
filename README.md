@@ -26,7 +26,19 @@ sokonaut/
 
 WIP
 
-levelinayton linkit
-pisteet
-highscore
-pisteiden tallennus
+    level won näyttö rikki
+    Game won näyttö
+
+    leveli näkymään kentässä
+
+    pisteet
+    highscore
+    pisteiden tallennus
+
+    hiiri?
+
+    levelit unclockaantuu edetessä
+
+    Android port
+
+    Credits + TIP
