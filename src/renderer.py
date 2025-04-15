@@ -79,11 +79,14 @@ class Renderer:
         text = self.font.render(f"Moves: {self.game_state.moves}", True, (210, 105, 30))
         self.display.blit(text, (150, ui_y))
 
-        text = self.font.render("F2 = Main menu", True, (200, 200, 200))
-        self.display.blit(text, (300, ui_y))
+        text = self.font.render(f"score: {self.game_state.total_score}", True, (200, 200, 200))
+        self.display.blit(text, (self.display.get_width() // 2 - text.get_width() // 2, ui_y))
 
-        text = self.font.render("F3 = Restart Level", True, (200, 200, 200))
-        self.display.blit(text, (500, ui_y))
+        text = self.font.render("F3 = Restart", True, (200, 200, 200))
+        self.display.blit(text, (self.display.get_width() - text.get_width() - 170, ui_y))
+
+        text = self.font.render("F2 = Menu", True, (200, 200, 200))
+        self.display.blit(text, (self.display.get_width() - text.get_width() - 25, ui_y))
 
 
         # Check if all levels are completed
@@ -96,7 +99,7 @@ class Renderer:
             # Draw rounded rectangle with alpha
             pygame.draw.rect(
                 menu_surface, 
-                (50, 50, 50, 200),  # Semi-transparent dark background
+                (50, 50, 50, 216),  # Semi-transparent dark background
                 (0, 0, menu_width, menu_height),
                 border_radius=15
             )
@@ -107,33 +110,34 @@ class Renderer:
             self.display.blit(menu_surface, (menu_x, menu_y))
 
             # Draw game won text
-            text = self.font.render("Game Won!", True, (210, 105, 30))
+            text = self.font.render("Game won, good job!", True, (210, 105, 30))
             text_x = self.display.get_width() // 2 - text.get_width() // 2
             text_y = menu_y + 30
             self.display.blit(text, (text_x, text_y))
 
-            # Draw options text
-            restart_text = self.font.render("F2 to Main menu", True, (200, 200, 200))
-            restart_x = self.display.get_width() // 2 - restart_text.get_width() // 2
-            restart_y = text_y + text.get_height() + 20
-            self.display.blit(restart_text, (restart_x, restart_y))
+            # Draw total score
+            score_text = self.font.render(f"TOTAL SCORE: {self.game_state.total_score}", True, (200, 200, 200))
+            score_x = self.display.get_width() // 2 - score_text.get_width() // 2
+            score_y = menu_y + 90
+            self.display.blit(score_text, (score_x, score_y))
 
-            quit_text = self.font.render("ESC to exit the game", True, (200, 200, 200))
-            quit_x = self.display.get_width() // 2 - quit_text.get_width() // 2
-            quit_y = restart_y + restart_text.get_height() + 20
-            self.display.blit(quit_text, (quit_x, quit_y))
+            # Draw options text
+            menu_text = self.font.render("F2 to Main menu", True, (200, 200, 200))
+            menu_x = self.display.get_width() // 2 - menu_text.get_width() // 2
+            menu_y = menu_y + 180
+            self.display.blit(menu_text, (menu_x, menu_y - 30))
         
         # Check if level is completed
         elif self.game_state.level_won():         
             # Create a semi-transparent background box for text
             menu_width = 400
-            menu_height = 150
+            menu_height = 180
             menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
             
             # Draw rounded rectangle with alpha
             pygame.draw.rect(
                 menu_surface, 
-                (50, 50, 50, 200),
+                (50, 50, 50, 216),
                 (0, 0, menu_width, menu_height),
                 border_radius=15
             )
@@ -149,11 +153,18 @@ class Renderer:
             text_y = menu_y + 30
             self.display.blit(text, (text_x, text_y))
 
+            # Draw level score
+            text = self.font.render(f"POINTS: {self.game_state.level_score}", True, (200, 200, 200))
+            score_x = self.display.get_width() // 2 - text.get_width() // 2
+            # score_y = text_y + text.get_height() + 20
+            score_y = menu_y + 80
+            self.display.blit(text, (score_x, score_y))
+
             # Add Next Level-button if not on last level
             if self.game_state.current_level < len(self.game_state.maps) - 1:
                 next_text = self.font.render("Press SPACE for next level", True, (200, 200, 200))
                 next_x = self.display.get_width() // 2 - next_text.get_width() // 2
-                next_y = text_y + text.get_height() + 20
+                next_y = menu_y + 130
                 self.display.blit(next_text, (next_x, next_y))
 
         pygame.display.flip()

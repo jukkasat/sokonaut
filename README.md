@@ -25,11 +25,9 @@ sokonaut/
 
 
 WIP
-
-    level won näyttö rikki
+    parannukset
+    level won näyttö
     Game won näyttö
-
-    leveli näkymään kentässä
 
     pisteet
     highscore
