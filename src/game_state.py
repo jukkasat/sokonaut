@@ -5,6 +5,9 @@ class GameState:
         self.current_level = 0
         self.moves = 0
         self.original_maps = get_maps()
+
+        self.level_score = 100
+        self.total_score = 0
         
         # Make a deep copy for gameplay - need to copy each row in each map
         self.maps = [[row[:] for row in map] for map in self.original_maps]
@@ -23,6 +26,7 @@ class GameState:
         if 0 <= level < len(self.original_maps):
             self.current_level = level
             self.moves = 0
+            self.level_score = 100
             # Create a deep copy of the map
             self.map = [row[:] for row in self.original_maps[level]]
             # Update dimensions for the new map
@@ -92,6 +96,11 @@ class GameState:
 
         # Increment the move counter
         self.moves += 1
+        self.level_score = max(0, self.level_score - 1)
+
+        # If level is won after this move, add level score to total
+        if self.level_won():
+            self.total_score += self.level_score
 
     def restart_level(self):
         self.map = [row[:] for row in self.original_maps[self.current_level]]
