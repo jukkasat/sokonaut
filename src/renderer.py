@@ -28,7 +28,7 @@ class Renderer:
 
     def load_images(self):
         # Load images for the game tiles
-        images = []  # Create local images list
+        images = []
         for name in ["lattia", "seina", "kohde", "laatikko", "robo", "valmis", "kohderobo"]:
             try:
                 image = pygame.image.load("src/img/" + name + ".png")

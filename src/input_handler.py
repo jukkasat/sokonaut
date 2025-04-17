@@ -20,7 +20,7 @@ class InputHandler:
                     self.game_state.move(1, 0)
                 if event.key == pygame.K_F2:
                     return "return_to_menu"
-                if event.key == pygame.K_F3:
+                if event.key == pygame.K_F3 and not (self.game_state.level_won() or self.game_state.game_completed()):
                     self.game_state.restart_level()
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
