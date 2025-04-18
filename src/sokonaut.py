@@ -1,4 +1,5 @@
 import pygame
+import sys
 from game_state import GameState
 from renderer import Renderer
 from input_handler import InputHandler
@@ -27,10 +28,8 @@ class Sokonaut:
         self.loop()
 
     def loop(self):
-        # Main game loop
         while True:
             if self.menu.in_menu:
-                # Handle menu input and actions
                 action = self.menu.handle_input()
                 if action == "new_game":
                     self.game_state.new_game()
@@ -38,45 +37,55 @@ class Sokonaut:
                     self.renderer.update_scaling()
                     self.menu.in_menu = False
                 elif action and action.startswith("start_level_"):
-                    # Extract the level number from the action string
                     level = int(action.split("_")[-1])
-                    # Set the current level in the game state
                     self.game_state.start_level(level)
-                    # Update game dimensions based on the new level's map
                     self.game_state._update_dimensions()
-                    # Update renderer scaling for new map
                     self.renderer.update_scaling()
-                    # Exit the menu and start the game
                     self.menu.in_menu = False
-                self.menu.draw()  # Draw the menu
+                elif action == "high_score":
+                    self.menu.active_menu = "high_score"
+                elif action == "levels":
+                    self.menu.active_menu = "levels"
+                self.menu.draw()
             else:
-                # Handle game input and rendering
-                action = self.input_handler.handle_events()  # Get the action
-
+                action = self.input_handler.handle_events()
                 if action == "return_to_menu":
                     # Check for high score before returning to menu
                     if (self.game_state.total_score > 0 and 
                         self.high_scores.is_high_score(self.game_state.total_score)):
-                        self.menu.entering_name = True
-                        self.menu.current_name = ""
-                        while self.menu.entering_name:
-                            for event in pygame.event.get():
-                                if event.type == pygame.KEYDOWN:
-                                    if event.key == pygame.K_RETURN and self.menu.current_name:
-                                        self.high_scores.add_score(
-                                            self.menu.current_name,
-                                            self.game_state.total_score
-                                        )
-                                        self.menu.entering_name = False
-                                    elif event.key == pygame.K_BACKSPACE:
-                                        self.menu.current_name = self.menu.current_name[:-1]
-                                    elif event.key == pygame.K_ESCAPE:
-                                        self.menu.entering_name = False
-                                    elif len(self.menu.current_name) < 15:
-                                        if event.unicode.isalnum():
-                                            self.menu.current_name += event.unicode
-                            self.menu.draw_name_entry(self.game_state.total_score)
-                    self.menu.in_menu = True
+                        self.menu.active_menu = "name_entry"
+                        self.menu.name_entry_menu.score = self.game_state.total_score
+                        self.menu.name_entry_menu.current_name = self.menu.current_name
+                        self.menu.draw()
+
+                        # Handle name entry input
+                        entering_name = True
+                        while entering_name:
+                            event = pygame.event.wait()
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                sys.exit()
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_BACKSPACE:
+                                    self.menu.name_entry_menu.current_name = self.menu.name_entry_menu.current_name[:-1]
+                                elif event.key == pygame.K_RETURN:
+                                    self.high_scores.add_score(self.menu.name_entry_menu.current_name, self.game_state.total_score)
+                                    self.menu.current_name = self.menu.name_entry_menu.current_name
+                                    entering_name = False
+                                    self.menu.in_menu = True
+                                    self.menu.active_menu = "main_menu"
+                                elif event.key == pygame.K_ESCAPE:
+                                    entering_name = False
+                                    self.menu.in_menu = True
+                                    self.menu.active_menu = "main_menu"
+                                elif len(self.menu.name_entry_menu.current_name) < 15:
+                                    if event.unicode.isalnum():
+                                        self.menu.name_entry_menu.current_name += event.unicode
+                            self.menu.draw()
+                    else:
+                        self.menu.in_menu = True
+                        self.menu.active_menu = "main_menu"
+            if not self.menu.in_menu:
                 self.renderer.draw()
 
 # Entry point for the game
