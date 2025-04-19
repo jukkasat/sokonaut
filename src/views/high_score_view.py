@@ -39,16 +39,16 @@ class HighScoresMenu(MenuBase):
                 self.display.blit(score_text, (menu_x + 300, y_pos))
                 y_pos += 40
 
-        # Draw back text
-        back_text = self.menu_font_small.render("Press ESC to return", True, (200, 200, 200))
+        # Draw back button
+        back_text = self.menu_font_small.render("BACK", True, (210, 105, 30))
         back_x = self.display.get_width() // 2 - back_text.get_width() // 2
-        back_y = menu_y + menu_height - 40
+        back_y = menu_y + menu_height - 45
         self.display.blit(back_text, (back_x, back_y))
 
         pygame.display.flip()
 
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                return "main_menu"
+            if event.key == pygame.K_RETURN:
+                return "main_menu"        
         return None
