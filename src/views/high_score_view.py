@@ -4,15 +4,17 @@ from views.menu_base import MenuBase
 class HighScoresMenu(MenuBase):
     def __init__(self, display, renderer, high_scores=None):
         super().__init__(display, renderer, high_scores)
+        self.background_image = self.load_menu_background()
 
     def draw(self):
         self.display.fill((0, 0, 0))
 
-        # Draw background
-        self.draw_background()
+        # Draw background image
+        if self.background_image:
+            self.display.blit(self.background_image, (0, 0))
 
         # Draw title
-        title = self.menu_font.render("HIGH SCORES", True, (224, 127, 50))
+        title = self.menu_font.render("HIGH SCORES", True, (255, 130, 0))
         title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
         self.display.blit(title, title_pos)
 
@@ -29,10 +31,18 @@ class HighScoresMenu(MenuBase):
         # Draw scores
         y_pos = menu_y + 30
         if self.high_scores is not None:
-            for i, score in enumerate(self.high_scores.get_scores()):
-                rank_text = self.menu_font_small.render(f"{i+1}.", True, (200, 200, 200))
-                name_text = self.menu_font_small.render(score["name"], True, (200, 200, 200))
-                score_text = self.menu_font_small.render(str(score["score"]), True, (200, 200, 200))
+            scores = self.high_scores.get_scores()
+            for i, score in enumerate(scores):
+                if i == 0:  # First place: Gold
+                    color = (212, 175, 55)
+                    font = pygame.font.SysFont("Arial", 22)
+                else:  # Other scores
+                    color = (200, 200, 200)
+                    font = self.menu_font_small
+                
+                rank_text = font.render(f"{i+1}.", True, color)
+                name_text = font.render(score["name"], True, color)
+                score_text = font.render(str(score["score"]), True, color)
                 
                 self.display.blit(rank_text, (menu_x + 50, y_pos))
                 self.display.blit(name_text, (menu_x + 100, y_pos))

@@ -7,16 +7,18 @@ class MainMenu(MenuBase):
         super().__init__(display, renderer, high_scores)
         self.menu_items = ["New Game", "Levels", "High Score", "Quit"]
         self.selected_item = 0
-
+        self.background_image = self.load_menu_background()
+        
     def draw(self):
         # Clear the screen
         self.display.fill((0, 0, 0))
 
-        # Draw background
-        self.draw_background()
+        # Draw background image
+        if self.background_image:
+            self.display.blit(self.background_image, (0, 0))
 
         # Draw title
-        title = self.menu_font.render("SOKONAUT", True, (224, 127, 50))
+        title = self.menu_font.render("SOKONAUT", True, (255, 130, 0))
         title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
         self.display.blit(title, title_pos)
         

@@ -6,6 +6,8 @@ class Renderer:
         self.game_state = game_state
         self.display = display
         self.images = self.load_images()
+        self.level_backgrounds = self.load_level_backgrounds()
+        self.game_won_background = self.load_game_won_background()
 
         # Calculate scaling to fit screen width
         self.scale_factor = self.display.get_width() / (self.game_state.width * self.images[0].get_width())
@@ -29,7 +31,7 @@ class Renderer:
     def load_images(self):
         # Load images for the game tiles
         images = []
-        for name in ["lattia", "seina", "kohde", "laatikko", "robo", "valmis", "kohderobo"]:
+        for name in ["floor1", "wall1", "target1", "barrel1", "player3", "ready1", "robotarget1"]:
             try:
                 image = pygame.image.load("src/img/" + name + ".png")
                 images.append(image)
@@ -41,22 +43,51 @@ class Renderer:
             raise RuntimeError("No images were loaded. Ensure the image files exist in 'src/img/'.")
         
         return images
-
-    def draw_menu_background(self):
-        # Draw floor tiles
-        for y in range(self.menu_bg_height):
-            for x in range(self.menu_bg_width):
-                # Draw walls on edges
-                if x == 0 or x == self.menu_bg_width - 1 or y == 0 or y == self.menu_bg_height - 1:
-                    tile = self.scaled_images[1]  # Wall
-                else:
-                    tile = self.scaled_images[0]  # Floor
-                self.display.blit(tile, (x * self.tile_size, y * self.tile_size))
+    
+    def load_level_backgrounds(self):
+        level_backgrounds = []
+        for i in range(0, 6):  # Load level_background0.png to level_background6.png
+            try:
+                background_image = pygame.image.load(f"src/img/level_background{i}.png")
+                level_backgrounds.append(pygame.transform.scale(background_image, (self.display.get_width(), self.display.get_height())))
+            except pygame.error as e:
+                print(f"Warning: Could not load level background image {i}. Error: {e}")
+                level_backgrounds.append(None)
+        return level_backgrounds
+    
+    def load_game_won_background(self):
+        try:
+            background_image = pygame.image.load("src/img/game_won_background.png")
+            return pygame.transform.scale(background_image, (self.display.get_width(), self.display.get_height()))
+        except pygame.error as e:
+            print(f"Warning: Could not load level won background image. Error: {e}")
+            return None
 
     def draw(self):
         # Update scaling before drawing in case map dimensions changed
         self.update_scaling()
         self.display.fill((0, 0, 0))
+
+       # Determine which background image to use based on the level
+        background_index = None
+        if self.game_state.current_level == 0:
+            background_index = 0
+        elif 1 <= self.game_state.current_level <= 5:
+            background_index = 1
+        elif 6 <= self.game_state.current_level <= 10:
+            background_index = 2
+        elif 11 <= self.game_state.current_level <= 15:
+            background_index = 3
+        elif 16 <= self.game_state.current_level <= 20:
+            background_index = 4
+        elif self.game_state.current_level == 21:
+            background_index = 5
+
+        # Draw level background image
+        if (background_index is not None and
+            background_index < len(self.level_backgrounds) and
+            self.level_backgrounds[background_index]):
+            self.display.blit(self.level_backgrounds[background_index], (0, 0))
 
         # Get current map dimensions
         map_width = len(self.game_state.map[0])
@@ -70,8 +101,17 @@ class Renderer:
                 pos_y = self.offset_y + (y * self.tile_size)
                 self.display.blit(self.scaled_images[tile], (pos_x, pos_y))
 
+
+        # Draw semi-transparent strip at the bottom
+        strip_height = 40  # Height of the strip
+        strip = pygame.Surface((self.display.get_width(), strip_height), pygame.SRCALPHA)
+        strip.fill((0, 0, 0, 188))  # Black with 50% transparency
+        self.display.blit(strip, (0, self.display.get_height() - strip_height))
+
+
         # Draw UI elements below the game field
-        ui_y = self.offset_y + (self.game_state.height * self.tile_size) + 10
+        # ui_y = self.offset_y + (self.game_state.height * self.tile_size) + 10
+        ui_y = self.display.get_height() - 35  # Position 35 pixels from the bottom
         
         text = self.font.render(f"Level: {self.game_state.current_level}", True, (200, 200, 200))
         self.display.blit(text, (25, ui_y))
@@ -91,6 +131,10 @@ class Renderer:
 
         # Check if all levels are completed
         if self.game_state.game_completed():
+            # Draw level won background
+            if self.game_won_background:
+                self.display.blit(self.game_won_background, (0, 0))
+
             # Create a semi-transparent background box for text
             menu_width = 400
             menu_height = 200
@@ -154,15 +198,14 @@ class Renderer:
             self.display.blit(text, (text_x, text_y))
 
             # Draw level score
-            text = self.font.render(f"POINTS: {self.game_state.level_score}", True, (200, 200, 200))
+            text = self.font.render(f"SCORE: {self.game_state.level_score}", True, (200, 200, 200))
             score_x = self.display.get_width() // 2 - text.get_width() // 2
-            # score_y = text_y + text.get_height() + 20
             score_y = menu_y + 80
             self.display.blit(text, (score_x, score_y))
 
             # Add Next Level-button if not on last level
             if self.game_state.current_level < len(self.game_state.maps) - 1:
-                next_text = self.font.render("Press SPACE for next level", True, (200, 200, 200))
+                next_text = self.font.render("Press ENTER to start next level", True, (200, 200, 200))
                 next_x = self.display.get_width() // 2 - next_text.get_width() // 2
                 next_y = menu_y + 130
                 self.display.blit(next_text, (next_x, next_y))
