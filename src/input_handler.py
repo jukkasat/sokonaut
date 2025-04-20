@@ -24,7 +24,7 @@ class InputHandler:
                     self.game_state.restart_level()
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
-                if event.key == pygame.K_SPACE and self.game_state.level_won():
+                if event.key == pygame.K_RETURN and self.game_state.level_won():
                     if self.game_state.current_level < len(self.game_state.maps) - 1:
                         self.game_state.current_level += 1
                         self.game_state.map = self.game_state.maps[self.game_state.current_level]

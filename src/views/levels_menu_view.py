@@ -7,16 +7,18 @@ class LevelsMenu(MenuBase):
         self.levels_per_column = 11
         self.total_levels = 22
         self.selected_level = 0
+        self.background_image = self.load_menu_background()
 
     def draw(self):
         # Clear the screen
         self.display.fill((0, 0, 0))
 
-        # Draw background
-        self.draw_background()
+        # Draw background image
+        if self.background_image:
+            self.display.blit(self.background_image, (0, 0))
 
         # Draw title
-        title = self.menu_font.render("LEVELS", True, (224, 127, 50))
+        title = self.menu_font.render("LEVELS", True, (255, 130, 0))
         title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
         self.display.blit(title, title_pos)
         
@@ -51,8 +53,7 @@ class LevelsMenu(MenuBase):
             self.display.blit(text, (x, y))
             
         # Draw back button
-        back_text = self.menu_font_small.render("BACK", True, 
-                                            (210, 105, 30) if self.selected_level == -1 else (200, 200, 200))
+        back_text = self.menu_font_small.render("BACK", True, (210, 105, 30) if self.selected_level == -1 else (200, 200, 200))
         back_x = self.display.get_width() // 2 - back_text.get_width() // 2
         back_y = menu_y + menu_height - 45  # Position back button near bottom of menu box
         self.display.blit(back_text, (back_x, back_y))
