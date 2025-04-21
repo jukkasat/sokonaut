@@ -27,7 +27,7 @@ class MenuBase:
 
     def load_menu_background(self):
         try:
-            background_image = pygame.image.load("src/img/background1.png")
+            background_image = pygame.image.load("src/img/menu_background.png")
             return pygame.transform.scale(background_image, (self.display.get_width(), self.display.get_height()))
         except pygame.error as e:
             print(f"Warning: Could not load background image. Error: {e}")

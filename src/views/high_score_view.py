@@ -1,5 +1,5 @@
 import pygame
-from views.menu_base import MenuBase
+from src.views.menu_base import MenuBase
 
 class HighScoresMenu(MenuBase):
     def __init__(self, display, renderer, high_scores=None):
@@ -15,7 +15,7 @@ class HighScoresMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("HIGH SCORES", True, (255, 130, 0))
-        title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
+        title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 60)
         self.display.blit(title, title_pos)
 
         # Create background for scores
@@ -25,7 +25,7 @@ class HighScoresMenu(MenuBase):
         pygame.draw.rect(menu_surface, (50, 50, 50, 200), (0, 0, menu_width, menu_height), border_radius=15)
         
         menu_x = self.display.get_width() // 2 - menu_width // 2
-        menu_y = 180
+        menu_y = 170
         self.display.blit(menu_surface, (menu_x, menu_y))
 
         # Draw scores

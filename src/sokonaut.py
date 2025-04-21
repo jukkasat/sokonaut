@@ -1,10 +1,10 @@
 import pygame
 import sys
-from game_state import GameState
-from renderer import Renderer
-from input_handler import InputHandler
-from menu import Menu
-from high_scores import HighScores
+from src.game_state import GameState
+from src.renderer import Renderer
+from src.input_handler import InputHandler
+from src.menu import Menu
+from src.high_scores import HighScores
 
 class Sokonaut:
 
@@ -87,7 +87,3 @@ class Sokonaut:
                         self.menu.active_menu = "main_menu"
             if not self.menu.in_menu:
                 self.renderer.draw()
-
-# Entry point for the game
-if __name__ == "__main__":
-    Sokonaut()

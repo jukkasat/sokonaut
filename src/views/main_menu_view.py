@@ -1,6 +1,6 @@
 import pygame
 import sys
-from views.menu_base import MenuBase
+from src.views.menu_base import MenuBase
 
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, high_scores=None):
