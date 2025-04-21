@@ -1,5 +1,5 @@
 import pygame
-from views.menu_base import MenuBase
+from src.views.menu_base import MenuBase
 
 class NameEntryMenu(MenuBase):
     def __init__(self, display, renderer, high_scores=None):

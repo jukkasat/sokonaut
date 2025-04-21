@@ -1,8 +1,8 @@
 import pygame
-from image_loader import ImageLoader
-from ui_drawer import UIDrawer
-from game_over_handler import GameOverHandler
-from level_won_handler import LevelWonHandler
+from src.image_loader import ImageLoader
+from src.ui_drawer import UIDrawer
+from src.game_over_handler import GameOverHandler
+from src.level_won_handler import LevelWonHandler
 
 class Renderer:
     def __init__(self, game_state, display):
@@ -37,26 +37,39 @@ class Renderer:
         self.update_scaling()
         self.display.fill((0, 0, 0))
 
-        # Determine which background image to use based on the level
+        # Determine which images to use based on the level
         background_index = None
+        tile_set_index = None
+
         if self.game_state.current_level == 0:
             background_index = 0
+            tile_set_index = 0
         elif 1 <= self.game_state.current_level <= 5:
             background_index = 1
+            tile_set_index = 1
         elif 6 <= self.game_state.current_level <= 10:
             background_index = 2
+            tile_set_index = 2
         elif 11 <= self.game_state.current_level <= 15:
             background_index = 3
+            tile_set_index = 3
         elif 16 <= self.game_state.current_level <= 20:
             background_index = 4
+            tile_set_index = 4
         elif self.game_state.current_level == 21:
             background_index = 5
+            tile_set_index = 5
 
         # Draw level background image
         if (background_index is not None and
             background_index < len(self.image_loader.level_backgrounds) and
             self.image_loader.level_backgrounds[background_index]):
             self.display.blit(self.image_loader.level_backgrounds[background_index], (0, 0))
+
+        # Set the current tile set
+        if tile_set_index is not None and tile_set_index < len(self.image_loader.tile_sets):
+            self.image_loader.images = self.image_loader.tile_sets[tile_set_index]
+            self.update_scaling()  # Update scaling with the new images
 
         # Get current map dimensions
         map_width = len(self.game_state.map[0])

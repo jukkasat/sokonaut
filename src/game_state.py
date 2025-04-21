@@ -1,4 +1,4 @@
-from maps import get_maps
+from src.maps import get_maps
 
 class GameState:
     def __init__(self):
