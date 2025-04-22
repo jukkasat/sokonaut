@@ -1,10 +1,10 @@
 import pygame
 
 class MenuBase:
-    def __init__(self, display, renderer, high_scores=None):
+    def __init__(self, display, renderer, scores=None):
         self.display = display
         self.renderer = renderer
-        self.high_scores = high_scores
+        self.scores = scores
         self.menu_font = pygame.font.SysFont("Arial", 74)
         self.menu_font_small = pygame.font.SysFont("Arial", 20)
         self.tile_size = 32

@@ -2,8 +2,8 @@ import pygame
 from src.views.menu_base import MenuBase
 
 class HighScoresMenu(MenuBase):
-    def __init__(self, display, renderer, high_scores=None):
-        super().__init__(display, renderer, high_scores)
+    def __init__(self, display, renderer, scores=None):
+        super().__init__(display, renderer, scores)
         self.background_image = self.load_menu_background()
 
     def draw(self):
@@ -30,8 +30,8 @@ class HighScoresMenu(MenuBase):
 
         # Draw scores
         y_pos = menu_y + 30
-        if self.high_scores is not None:
-            scores = self.high_scores.get_scores()
+        if self.scores is not None:
+            scores = self.scores.get_scores()
             for i, score in enumerate(scores):
                 if i == 0:  # First place: Gold
                     color = (212, 175, 55)

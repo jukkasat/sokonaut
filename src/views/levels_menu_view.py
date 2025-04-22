@@ -2,8 +2,8 @@ import pygame
 from src.views.menu_base import MenuBase
 
 class LevelsMenu(MenuBase):
-    def __init__(self, display, renderer, high_scores=None):
-        super().__init__(display, renderer, high_scores)
+    def __init__(self, display, renderer, scores=None):
+        super().__init__(display, renderer, scores)
         self.levels_per_column = 11
         self.total_levels = 22
         self.selected_level = 0
@@ -45,7 +45,10 @@ class LevelsMenu(MenuBase):
             col = i // self.levels_per_column  # Split into two columns
             row = i % self.levels_per_column
             
-            color = (210, 105, 30) if i == self.selected_level else (200, 200, 200)
+            if self.scores.is_level_unlocked(i):
+                color = (210, 105, 30) if i == self.selected_level else (200, 200, 200)
+            else:
+                color = (200, 105, 30) if i == self.selected_level else (100, 100, 100)  # Gray color for locked levels
             text = self.menu_font_small.render(f"Level {i}", True, color)
             
             x = menu_x + 50 + (col * 200)
@@ -84,5 +87,8 @@ class LevelsMenu(MenuBase):
                 if self.selected_level == -1:  # Back button selected
                     return "main_menu"
                 else:
-                    return f"start_level_{self.selected_level}"
+                    if self.scores.is_level_unlocked(self.selected_level):
+                        return f"start_level_{self.selected_level}"
+                    else:
+                        return None
         return None

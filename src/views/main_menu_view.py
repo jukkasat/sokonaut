@@ -3,8 +3,8 @@ import sys
 from src.views.menu_base import MenuBase
 
 class MainMenu(MenuBase):
-    def __init__(self, display, renderer, high_scores=None):
-        super().__init__(display, renderer, high_scores)
+    def __init__(self, display, renderer, scores=None):
+        super().__init__(display, renderer, scores)
         self.menu_items = ["New Game", "Levels", "High Score", "Quit"]
         self.selected_item = 0
         self.background_image = self.load_menu_background()

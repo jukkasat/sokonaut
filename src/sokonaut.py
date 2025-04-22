@@ -4,7 +4,8 @@ from src.game_state import GameState
 from src.renderer import Renderer
 from src.input_handler import InputHandler
 from src.menu import Menu
-from src.high_scores import HighScores
+from src.scores import Scores
+from src.audio_manager import AudioManager
 
 class Sokonaut:
 
@@ -18,13 +19,14 @@ class Sokonaut:
 
         # Initialize game components
         self.game_state = GameState()  # Manages the game state
-        self.renderer = Renderer(self.game_state, self.display)  # Handles rendering
-        self.input_handler = InputHandler(self.game_state)  # Handles user input
-        self.menu = Menu(self.display, self.renderer)  # Manages the menu
-        self.high_scores = HighScores()
-        self.menu = Menu(self.display, self.renderer, self.high_scores)
+        self.scores = Scores()
+        self.audio_manager = AudioManager() # Handles audio
+        self.renderer = Renderer(self.game_state, self.display, self.scores, self.audio_manager)  # Handles rendering
+        self.input_handler = InputHandler(self.game_state, self.scores, self.audio_manager)  # Handles user input
+        self.menu = Menu(self.display, self.renderer, self.scores, self.audio_manager)  # Manages the menu
 
         # Start the main game loop
+        self.audio_manager.play_music("menu")
         self.loop()
 
     def loop(self):
@@ -36,27 +38,35 @@ class Sokonaut:
                     self.game_state._update_dimensions()
                     self.renderer.update_scaling()
                     self.menu.in_menu = False
+                    self.audio_manager.play_music("level")
                 elif action and action.startswith("start_level_"):
                     level = int(action.split("_")[-1])
-                    self.game_state.start_level(level)
-                    self.game_state._update_dimensions()
-                    self.renderer.update_scaling()
-                    self.menu.in_menu = False
+                    if self.scores.is_level_unlocked(level):
+                        self.game_state.start_level(level)
+                        self.game_state._update_dimensions()
+                        self.renderer.update_scaling()
+                        self.menu.in_menu = False
+                        self.audio_manager.play_music("level")
+                    else:
+                        print("Level is locked!")
                 elif action == "high_score":
                     self.menu.active_menu = "high_score"
+                    self.audio_manager.pause_music()
                 elif action == "levels":
                     self.menu.active_menu = "levels"
+                    self.audio_manager.pause_music()
                 self.menu.draw()
             else:
                 action = self.input_handler.handle_events()
                 if action == "return_to_menu":
                     # Check for high score before returning to menu
                     if (self.game_state.total_score > 0 and 
-                        self.high_scores.is_high_score(self.game_state.total_score)):
+                        self.scores.is_high_score(self.game_state.total_score)):
                         self.menu.active_menu = "name_entry"
                         self.menu.name_entry_menu.score = self.game_state.total_score
                         self.menu.name_entry_menu.current_name = self.menu.current_name
                         self.menu.draw()
+                        self.audio_manager.pause_music()
 
                         # Handle name entry input
                         entering_name = True
@@ -74,10 +84,12 @@ class Sokonaut:
                                     entering_name = False
                                     self.menu.in_menu = True
                                     self.menu.active_menu = "main_menu"
+                                    self.audio_manager.play_music("menu")
                                 elif event.key == pygame.K_ESCAPE:
                                     entering_name = False
                                     self.menu.in_menu = True
                                     self.menu.active_menu = "main_menu"
+                                    self.audio_manager.play_music("menu")
                                 elif len(self.menu.name_entry_menu.current_name) < 15:
                                     if event.unicode.isalnum():
                                         self.menu.name_entry_menu.current_name += event.unicode
@@ -85,5 +97,6 @@ class Sokonaut:
                     else:
                         self.menu.in_menu = True
                         self.menu.active_menu = "main_menu"
+                        self.audio_manager.play_music("menu")
             if not self.menu.in_menu:
                 self.renderer.draw()
