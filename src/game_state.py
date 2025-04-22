@@ -99,16 +99,16 @@ class GameState:
         boxes_in_target_before = self.count_boxes_in_target()
 
         if self.map[robo_new_y][robo_new_x] in [3, 5]:
-            laatikon_uusi_y = robo_new_y + move_y
-            laatikon_uusi_x = robo_new_x + move_x
+            box_new_y = robo_new_y + move_y
+            box_new_x = robo_new_x + move_x
 
             # Check if the box can be moved
-            if self.map[laatikon_uusi_y][laatikon_uusi_x] in [1, 3, 5]:
+            if self.map[box_new_y][box_new_x] in [1, 3, 5]:
                 return
 
             # Update the map for the box's new position
             self.map[robo_new_y][robo_new_x] -= 3
-            self.map[laatikon_uusi_y][laatikon_uusi_x] += 3
+            self.map[box_new_y][box_new_x] += 3
 
         # Update the map for the robot's new position
         self.map[robo_old_y][robo_old_x] -= 4
