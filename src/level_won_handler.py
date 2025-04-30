@@ -1,12 +1,11 @@
 import pygame
 
 class LevelWonHandler:
-    def __init__(self, display, game_state, font, scores, audio_manager):
+    def __init__(self, display, game_state, font, scores):
         self.display = display
         self.game_state = game_state
         self.font = font
         self.scores = scores
-        self.audio_manager = audio_manager
 
     def draw_level_won(self):
         # Create a semi-transparent background box for text
@@ -46,5 +45,3 @@ class LevelWonHandler:
             next_y = menu_y + 130
             self.display.blit(next_text, (next_x, next_y))
             self.scores.mark_level_completed(self.game_state.current_level)
-
-        self.audio_manager.play_sound("level_won")

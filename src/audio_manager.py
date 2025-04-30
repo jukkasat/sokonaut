@@ -10,15 +10,14 @@ class AudioManager:
         self.load_music()
 
     def load_sounds(self):
-        self.sounds["move"] = self._load_sound("src/audio/move1_1.wav")
-        self.sounds["select"] = self._load_sound("src/audio/select2.wav")
-        self.sounds["level_won"] = self._load_sound("src/audio/level_won.wav")
-        # Add more sounds here
+        self.sounds["move"] = self._load_sound("src/audio/move.ogg")
+        self.sounds["select"] = self._load_sound("src/audio/select2_1.ogg")
+        self.sounds["level_won"] = self._load_sound("src/audio/level_won.ogg")
+        self.sounds["barrel_ready"] = self._load_sound("src/audio/barrel_ready_effect.ogg")
 
     def load_music(self):
-        self.music["menu"] = self._load_music("src/audio/menu_music2.mp3")
-        self.music["level"] = self._load_music("src/audio/level_music.mp3")
-        # Add more music here
+        self.music["menu"] = self._load_music("src/audio/menu_music3.ogg")
+        self.music["level"] = self._load_music("src/audio/level_music.ogg")
 
     def _load_sound(self, path):
         try:
@@ -44,6 +43,9 @@ class AudioManager:
 
     def play_music(self, name, loop=-1):
         if name in self.music and self.music[name]:
+            if pygame.mixer.music.get_busy():  # Check if music is already playing
+                pygame.mixer.music.stop()  # Stop the current music
+
             pygame.mixer.music.load(self.music[name])
             pygame.mixer.music.play(loop)
 

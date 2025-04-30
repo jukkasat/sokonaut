@@ -13,7 +13,7 @@ class Renderer:
         self.font = pygame.font.SysFont("Arial", 24)
         self.ui_drawer = UIDrawer(display, game_state, self.font)
         self.game_over_handler = GameOverHandler(display, game_state, self.font, self.image_loader)
-        self.level_won_handler = LevelWonHandler(display, game_state, self.font, scores, audio_manager)
+        self.level_won_handler = LevelWonHandler(display, game_state, self.font, scores)
 
         # Calculate scaling to fit screen width
         self.scale_factor = self.display.get_width() / (self.game_state.width * self.image_loader.images[0].get_width())
