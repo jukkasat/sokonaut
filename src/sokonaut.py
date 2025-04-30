@@ -18,15 +18,16 @@ class Sokonaut:
         pygame.display.set_caption("Sokonaut")
 
         # Initialize game components
-        self.game_state = GameState()  # Manages the game state
-        self.scores = Scores()
         self.audio_manager = AudioManager() # Handles audio
+        self.game_state = GameState(self.audio_manager)  # Manages the game state
+        self.scores = Scores()
         self.renderer = Renderer(self.game_state, self.display, self.scores, self.audio_manager)  # Handles rendering
         self.input_handler = InputHandler(self.game_state, self.scores, self.audio_manager)  # Handles user input
         self.menu = Menu(self.display, self.renderer, self.scores, self.audio_manager)  # Manages the menu
 
-        # Start the main game loop
         self.audio_manager.play_music("menu")
+        
+        # Start the main game loop
         self.loop()
 
     def loop(self):
@@ -79,7 +80,7 @@ class Sokonaut:
                                 if event.key == pygame.K_BACKSPACE:
                                     self.menu.name_entry_menu.current_name = self.menu.name_entry_menu.current_name[:-1]
                                 elif event.key == pygame.K_RETURN:
-                                    self.high_scores.add_score(self.menu.name_entry_menu.current_name, self.game_state.total_score)
+                                    self.scores.add_score(self.menu.name_entry_menu.current_name, self.game_state.total_score)
                                     self.menu.current_name = self.menu.name_entry_menu.current_name
                                     entering_name = False
                                     self.menu.in_menu = True

@@ -1,10 +1,11 @@
 from src.maps import get_maps
 
 class GameState:
-    def __init__(self):
+    def __init__(self, audio_manager):
         self.current_level = 0
         self.moves = 0
         self.original_maps = get_maps()
+        self.audio_manager = audio_manager
 
         self.level_score = 100
         self.total_score = 0
@@ -18,6 +19,8 @@ class GameState:
 
         # Update dimensions when loading new map
         self._update_dimensions()
+
+        # self.level_won_sound_played = False
 
     def _update_dimensions(self):
         # Update map dimensions after loading a new level
@@ -49,6 +52,8 @@ class GameState:
             self._update_dimensions()
             # Also update the maps array with the new map
             self.maps[level] = [row[:] for row in self.original_maps[level]]
+
+            # self.level_won_sound_played = False
     
     def new_game(self):
         # Reset the game to its initial state
@@ -118,12 +123,21 @@ class GameState:
         self.moves += 1
         self.level_score = max(0, self.level_score - 1)
 
+        # Play barrel ready sound
+        boxes_in_target_after = self.count_boxes_in_target()
+
+        if boxes_in_target_after > boxes_in_target_before:
+            self.audio_manager.play_sound("barrel_ready")
+
         # If level is won after this move, add level score to total
         if self.level_won():
+            self.audio_manager.play_sound("level_won")
             boxes_in_target = self.count_boxes_in_target()
             target_bonus = boxes_in_target * 21
             self.level_score += target_bonus
             self.total_score += self.level_score
+        # elif boxes_in_target_after > boxes_in_target_before:
+        #     self.audio_manager.play_sound("barrel_ready")
 
     def restart_level(self):
         self.map = [row[:] for row in self.original_maps[self.current_level]]

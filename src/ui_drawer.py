@@ -28,5 +28,5 @@ class UIDrawer:
         text = self.font.render("F3 = Restart", True, (200, 200, 200))
         self.display.blit(text, (self.display.get_width() - text.get_width() - 170, ui_y))
 
-        text = self.font.render("F2 = Menu", True, (200, 200, 200))
+        text = self.font.render("F2 = Quit", True, (200, 200, 200))
         self.display.blit(text, (self.display.get_width() - text.get_width() - 25, ui_y))

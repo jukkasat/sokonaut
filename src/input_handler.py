@@ -32,6 +32,7 @@ class InputHandler:
                 if event.key == pygame.K_F3 and not (self.game_state.level_won() or self.game_state.game_completed()):
                     self.game_state.restart_level()
                 if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_RETURN and self.game_state.level_won():
                     if self.game_state.current_level < len(self.game_state.maps) - 1:
@@ -41,4 +42,5 @@ class InputHandler:
                         self.game_state.moves = 0
 
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
