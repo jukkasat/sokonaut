@@ -21,7 +21,7 @@ class Sokonaut:
         self.audio_manager = AudioManager() # Handles audio
         self.game_state = GameState(self.audio_manager)  # Manages the game state
         self.scores = Scores()
-        self.renderer = Renderer(self.game_state, self.display, self.scores, self.audio_manager)  # Handles rendering
+        self.renderer = Renderer(self.game_state, self.display, self.scores)  # Handles rendering
         self.input_handler = InputHandler(self.game_state, self.scores, self.audio_manager)  # Handles user input
         self.menu = Menu(self.display, self.renderer, self.scores, self.audio_manager)  # Manages the menu
 

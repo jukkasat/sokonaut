@@ -11,12 +11,14 @@ class AudioManager:
 
     def load_sounds(self):
         self.sounds["move"] = self._load_sound("src/audio/move.ogg")
-        self.sounds["select"] = self._load_sound("src/audio/select2_1.ogg")
+        self.sounds["select"] = self._load_sound("src/audio/menu_confirm.ogg")
         self.sounds["level_won"] = self._load_sound("src/audio/level_won.ogg")
         self.sounds["barrel_ready"] = self._load_sound("src/audio/barrel_ready_effect.ogg")
+        self.sounds["menu_select"] = self._load_sound("src/audio/menu_select.ogg")
+        self.sounds["level_select"] = self._load_sound("src/audio/level_select.ogg")
 
     def load_music(self):
-        self.music["menu"] = self._load_music("src/audio/menu_music3.ogg")
+        self.music["menu"] = self._load_music("src/audio/menu_music.ogg")
         self.music["level"] = self._load_music("src/audio/level_music.ogg")
 
     def _load_sound(self, path):

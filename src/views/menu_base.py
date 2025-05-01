@@ -1,7 +1,7 @@
 import pygame
 
 class MenuBase:
-    def __init__(self, display, renderer, scores=None):
+    def __init__(self, display, renderer, scores):
         self.display = display
         self.renderer = renderer
         self.scores = scores
