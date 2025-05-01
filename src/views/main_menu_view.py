@@ -3,11 +3,12 @@ import sys
 from src.views.menu_base import MenuBase
 
 class MainMenu(MenuBase):
-    def __init__(self, display, renderer, scores=None):
+    def __init__(self, display, renderer, scores, audio_manager):
         super().__init__(display, renderer, scores)
         self.menu_items = ["New Game", "Levels", "High Score", "Quit"]
         self.selected_item = 0
         self.background_image = self.load_menu_background()
+        self.audio_manager = audio_manager
         
     def draw(self):
         # Clear the screen
@@ -55,8 +56,10 @@ class MainMenu(MenuBase):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 self.selected_item = (self.selected_item - 1) % len(self.menu_items)
+                self.audio_manager.play_sound("menu_select")
             elif event.key == pygame.K_DOWN:
                 self.selected_item = (self.selected_item + 1) % len(self.menu_items)
+                self.audio_manager.play_sound("menu_select")
             elif event.key == pygame.K_RETURN:
                 return self.handle_selection()
         return None

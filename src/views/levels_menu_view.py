@@ -2,12 +2,13 @@ import pygame
 from src.views.menu_base import MenuBase
 
 class LevelsMenu(MenuBase):
-    def __init__(self, display, renderer, scores=None):
+    def __init__(self, display, renderer, scores, audio_manager):
         super().__init__(display, renderer, scores)
         self.levels_per_column = 11
         self.total_levels = 22
         self.selected_level = 0
         self.background_image = self.load_menu_background()
+        self.audio_manager = audio_manager
 
     def draw(self):
         # Clear the screen
@@ -76,6 +77,7 @@ class LevelsMenu(MenuBase):
                     self.selected_level = (self.selected_level - 1) % (self.total_levels + 1)
                     if self.selected_level == self.total_levels:
                         self.selected_level = -1  # Move to back button
+                self.audio_manager.play_sound("level_select")
             elif event.key == pygame.K_DOWN:
                 if self.selected_level == -1:  # If on back button
                     self.selected_level = 0
@@ -83,6 +85,7 @@ class LevelsMenu(MenuBase):
                     self.selected_level = (self.selected_level + 1) % (self.total_levels + 1)
                     if self.selected_level == self.total_levels:
                         self.selected_level = -1  # Move to back button
+                self.audio_manager.play_sound("level_select")
             elif event.key == pygame.K_RETURN:
                 if self.selected_level == -1:  # Back button selected
                     return "main_menu"

@@ -136,8 +136,6 @@ class GameState:
             target_bonus = boxes_in_target * 21
             self.level_score += target_bonus
             self.total_score += self.level_score
-        # elif boxes_in_target_after > boxes_in_target_before:
-        #     self.audio_manager.play_sound("barrel_ready")
 
     def restart_level(self):
         self.map = [row[:] for row in self.original_maps[self.current_level]]

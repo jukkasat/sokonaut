@@ -5,7 +5,7 @@ from src.game_over_handler import GameOverHandler
 from src.level_won_handler import LevelWonHandler
 
 class Renderer:
-    def __init__(self, game_state, display, scores, audio_manager):
+    def __init__(self, game_state, display, scores):
         self.game_state = game_state
         self.display = display
         self.image_loader = ImageLoader(display)

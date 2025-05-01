@@ -2,7 +2,7 @@ import pygame
 from src.views.menu_base import MenuBase
 
 class NameEntryMenu(MenuBase):
-    def __init__(self, display, renderer, scores=None):
+    def __init__(self, display, renderer, scores):
         super().__init__(display, renderer, scores)
         self.current_name = ""
         self.score = 0
