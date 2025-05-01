@@ -17,24 +17,37 @@ class Renderer:
 
         # Calculate scaling to fit screen width
         self.scale_factor = self.display.get_width() / (self.game_state.width * self.image_loader.images[0].get_width())
-        self.tile_size = int(self.image_loader.images[0].get_width() * self.scale_factor)
 
-        # Calculate centering offsets
-        self.offset_x = 0  # Will be 0 when scaling to full width
+        # Initial scaling
+        self.scale_factor = self.display.get_width() / (self.game_state.width * self.image_loader.images[0].get_width())
+        self.tile_size = int(self.image_loader.images[0].get_width() * self.scale_factor)
+        self.offset_x = 0
         self.offset_y = (self.display.get_height() - (self.game_state.height * self.tile_size)) // 2
 
-        # Scale all images
-        self.scaled_images = []
-        for image in self.image_loader.images:
-            scaled = pygame.transform.scale(image, (self.tile_size, self.tile_size))
-            self.scaled_images.append(scaled)
-
+        # Initialize scaled images and cache them
+        self.scaled_images = self._scale_images()
         self.menu_bg_width = self.display.get_width() // self.tile_size
         self.menu_bg_height = self.display.get_height() // self.tile_size
 
+        # Store the previous map dimensions to detect changes
+        self.prev_map_width = self.game_state.width
+        self.prev_map_height = self.game_state.height
+
+    def _scale_images(self):
+        """Scale all images and return them in a list"""
+        scaled_images = []
+        for image in self.image_loader.images:
+            scaled = pygame.transform.scale(image, (self.tile_size, self.tile_size))
+            scaled_images.append(scaled)
+        return scaled_images
+
     def draw(self):
-        # Update scaling before drawing in case map dimensions changed
-        self.update_scaling()
+
+        # Update scaling if map dimensions have changed
+        if (self.game_state.width != self.prev_map_width or
+            self.game_state.height != self.prev_map_height):
+            self.update_scaling()
+
         self.display.fill((0, 0, 0))
 
         # Determine which images to use based on the level
@@ -113,8 +126,9 @@ class Renderer:
         self.offset_x = (self.display.get_width() - (map_width * self.tile_size)) // 2
         self.offset_y = (self.display.get_height() - (map_height * self.tile_size)) // 2
 
-        # Scale all images
-        self.scaled_images = []
-        for image in self.image_loader.images:
-            scaled = pygame.transform.scale(image, (self.tile_size, self.tile_size))
-            self.scaled_images.append(scaled)
+        # Update scaled images
+        self.scaled_images = self._scale_images()
+
+        # Store the current map dimensions
+        self.prev_map_width = map_width
+        self.prev_map_height = map_height
