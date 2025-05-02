@@ -1,25 +1,25 @@
 import pygame
+from collections import OrderedDict
 
 class AudioManager:
-    def __init__(self):
+    def __init__(self, cache_size=5):
         pygame.mixer.init()
-        self.sounds = {}
+        self.sounds = OrderedDict()
         self.music = {}
-
-        self.load_sounds()
-        self.load_music()
-
-    def load_sounds(self):
-        self.sounds["move"] = self._load_sound("src/audio/move.ogg")
-        self.sounds["select"] = self._load_sound("src/audio/menu_confirm.ogg")
-        self.sounds["level_won"] = self._load_sound("src/audio/level_won.ogg")
-        self.sounds["barrel_ready"] = self._load_sound("src/audio/barrel_ready_effect.ogg")
-        self.sounds["menu_select"] = self._load_sound("src/audio/menu_select.ogg")
-        self.sounds["level_select"] = self._load_sound("src/audio/level_select.ogg")
-
-    def load_music(self):
-        self.music["menu"] = self._load_music("src/audio/menu_music.ogg")
-        self.music["level"] = self._load_music("src/audio/level_music.ogg")
+        self.sound_paths = {
+            "move": "src/audio/move.ogg",
+            "select": "src/audio/menu_confirm.ogg",
+            "level_won": "src/audio/level_won.ogg",
+            "barrel_ready": "src/audio/barrel_ready_effect.ogg",
+            "menu_select":  "src/audio/menu_select.ogg",
+            "level_select": "src/audio/level_select.ogg"
+        }
+        self.music_paths = {
+            "menu": "src/audio/menu_music.ogg",
+            "level": "src/audio/level_music.ogg"
+        }
+        self._load_music()
+        self.cache_size = cache_size
 
     def _load_sound(self, path):
         try:
@@ -30,24 +30,41 @@ class AudioManager:
             print(f"Could not load sound {path}: {e}")
             return None
 
-    def _load_music(self, path):
-        try:
-            pygame.mixer.music.load(path)
-            pygame.mixer.music.set_volume(0.1)
-            return path  # Return the path for playing
-        except pygame.error as e:
-            print(f"Could not load music {path}: {e}")
-            return None
-
     def play_sound(self, name):
-        if name in self.sounds and self.sounds[name]:
-            self.sounds[name].play()
+        if name in self.sound_paths:
+            if name not in self.sounds:
+                # Load the sound if it's not already loaded
+                sound = self._load_sound(self.sound_paths[name])
+                self.sounds[name] = sound
+            else:
+                # Move the sound to the end of the ordered dict to mark it as recently used
+                self.sounds.move_to_end(name)
+
+            if self.sounds[name]:
+                self.sounds[name].play()
+                self._manage_cache()
+
+    def _manage_cache(self):
+        """Remove the least recently used sound if the cache is full"""
+        if len(self.sounds) > self.cache_size:
+            # Get the least recently used sound (the first item in the ordered dict)
+            lru_sound_name, lru_sound = self.sounds.popitem(last=False)
+            print(f"Unloading sound: {lru_sound_name}")
+            del lru_sound  # Remove the sound from memory
+
+    def _load_music(self):
+        try:
+            for name, path in self.music_paths.items():
+                pygame.mixer.music.load(path)
+                pygame.mixer.music.set_volume(0.1)
+                self.music[name] = path  # Store the loaded music
+        except pygame.error as e:
+            print(f"Could not load music: {e}")
 
     def play_music(self, name, loop=-1):
-        if name in self.music and self.music[name]:
+        if name in self.music:
             if pygame.mixer.music.get_busy():  # Check if music is already playing
                 pygame.mixer.music.stop()  # Stop the current music
-
             pygame.mixer.music.load(self.music[name])
             pygame.mixer.music.play(loop)
 

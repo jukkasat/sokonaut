@@ -20,8 +20,6 @@ class GameState:
         # Update dimensions when loading new map
         self._update_dimensions()
 
-        # self.level_won_sound_played = False
-
     def _update_dimensions(self):
         # Update map dimensions after loading a new level
         self.height = len(self.map)

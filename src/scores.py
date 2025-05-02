@@ -5,7 +5,7 @@ class Scores:
     def __init__(self):
         self.scores = []
         self.score_file = "highscores.json"
-        self.levels_file = "levels.json"
+        self.levels_file = "levels_unlocked.json"
         self.load_scores()
         self.completed_levels = set()
         self.load_completed_levels()
