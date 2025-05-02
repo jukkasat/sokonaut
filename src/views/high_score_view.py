@@ -21,12 +21,9 @@ class HighScoresMenu(MenuBase):
         # Create background for scores
         menu_width = 400
         menu_height = 476
-        menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
-        pygame.draw.rect(menu_surface, (50, 50, 50, 200), (0, 0, menu_width, menu_height), border_radius=15)
-        
         menu_x = self.display.get_width() // 2 - menu_width // 2
         menu_y = 170
-        self.display.blit(menu_surface, (menu_x, menu_y))
+        self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
         # Draw scores
         y_pos = menu_y + 30

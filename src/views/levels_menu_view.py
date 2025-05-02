@@ -26,20 +26,9 @@ class LevelsMenu(MenuBase):
         # Create levels view background
         menu_width = 400
         menu_height = 420
-        menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
-        
-        # Draw rounded rectangle for levels menu
-        pygame.draw.rect(
-            menu_surface, 
-            (50, 50, 50, 200),
-            (0, 0, menu_width, menu_height),
-            border_radius=15
-        )
-        
-        # Position the levels menu background
         menu_x = self.display.get_width() // 2 - menu_width // 2
         menu_y = 200
-        self.display.blit(menu_surface, (menu_x, menu_y))
+        self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
         
         # Draw levels in two columns
         for i in range(self.total_levels):
