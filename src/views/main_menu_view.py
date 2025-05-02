@@ -26,20 +26,9 @@ class MainMenu(MenuBase):
         # Create a surface for the menu background with alpha channel
         menu_width = 300  # Width of the menu background
         menu_height = len(self.menu_items) * 50 + 80  # Height based on items plus padding
-        menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
-        
-        # Draw rounded rectangle with alpha
-        pygame.draw.rect(
-            menu_surface, 
-            (50, 50, 50, 200),  # RGBA: white with 50% transparency
-            (0, 0, menu_width, menu_height),
-            border_radius=15
-        )
-        
-        # Position the menu background
         menu_x = self.display.get_width() // 2 - menu_width // 2
         menu_y = 210  # Adjust this value to position the menu box
-        self.display.blit(menu_surface, (menu_x, menu_y))
+        self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
         
         # Draw menu items
         for i, item in enumerate(self.menu_items):

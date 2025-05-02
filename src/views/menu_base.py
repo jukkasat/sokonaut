@@ -32,6 +32,16 @@ class MenuBase:
         except pygame.error as e:
             print(f"Warning: Could not load background image. Error: {e}")
             return None
+        
+    def draw_menu_background(self, width, height, x, y):
+        menu_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        pygame.draw.rect(
+            menu_surface,
+            (50, 50, 50, 200),  # RGBA: grey with transparency
+            (0, 0, width, height),
+            border_radius=15
+        )
+        self.display.blit(menu_surface, (x, y))
 
     def handle_input(self, event):
         pass
