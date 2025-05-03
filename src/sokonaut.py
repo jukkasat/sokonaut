@@ -2,10 +2,10 @@ import pygame
 import sys
 from src.game_state import GameState
 from src.renderer import Renderer
-from src.input_handler import InputHandler
+from src.handlers.input_handler import InputHandler
 from src.menu import Menu
 from src.scores import Scores
-from src.audio_manager import AudioManager
+from src.utils.audio_manager import AudioManager
 
 class Sokonaut:
 

@@ -1,5 +1,6 @@
 import pygame
 from src.views.menu_base import MenuBase
+from src.utils.helper import center_text, center_rect
 
 class LevelsMenu(MenuBase):
     def __init__(self, display, renderer, scores, audio_manager):
@@ -20,14 +21,13 @@ class LevelsMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("LEVELS", True, (255, 130, 0))
-        title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
-        self.display.blit(title, title_pos)
+        title_rect = center_text(self.display, title, 80)
+        self.display.blit(title, title_rect)
         
         # Create levels view background
         menu_width = 400
         menu_height = 420
-        menu_x = self.display.get_width() // 2 - menu_width // 2
-        menu_y = 200
+        menu_x, menu_y = center_rect(self.display, menu_width, 200)
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
         
         # Draw levels in two columns
@@ -47,9 +47,8 @@ class LevelsMenu(MenuBase):
             
         # Draw back button
         back_text = self.menu_font_small.render("BACK", True, (210, 105, 30) if self.selected_level == -1 else (200, 200, 200))
-        back_x = self.display.get_width() // 2 - back_text.get_width() // 2
-        back_y = menu_y + menu_height - 45  # Position back button near bottom of menu box
-        self.display.blit(back_text, (back_x, back_y))
+        back_rect = center_text(self.display, back_text, menu_y + menu_height - 45)
+        self.display.blit(back_text, back_rect)
         
         # Update the display
         pygame.display.flip()

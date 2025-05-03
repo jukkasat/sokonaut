@@ -1,6 +1,7 @@
 import pygame
 import sys
 from src.views.menu_base import MenuBase
+from src.utils.helper import center_text, center_rect
 
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores, audio_manager):
@@ -20,8 +21,8 @@ class MainMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("SOKONAUT", True, (255, 130, 0))
-        title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 80)
-        self.display.blit(title, title_pos)
+        title_rect = center_text(self.display, title, 80)
+        self.display.blit(title, title_rect)
         
         # Create a surface for the menu background with alpha channel
         menu_width = 300  # Width of the menu background

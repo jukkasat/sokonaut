@@ -1,8 +1,8 @@
 import pygame
-from src.image_loader import ImageLoader
-from src.ui_drawer import UIDrawer
-from src.game_over_handler import GameOverHandler
-from src.level_won_handler import LevelWonHandler
+from src.utils.image_loader import ImageLoader
+from src.utils.ui_drawer import UIDrawer
+from src.handlers.game_won_handler import GameWonHandler
+from src.handlers.level_won_handler import LevelWonHandler
 
 class Renderer:
     def __init__(self, game_state, display, scores):
@@ -12,7 +12,7 @@ class Renderer:
         self.images = self.image_loader.images
         self.font = pygame.font.SysFont("Arial", 24)
         self.ui_drawer = UIDrawer(display, game_state, self.font)
-        self.game_over_handler = GameOverHandler(display, game_state, self.font, self.image_loader)
+        self.game_over_handler = GameWonHandler(display, game_state, self.font, self.image_loader)
         self.level_won_handler = LevelWonHandler(display, game_state, self.font, scores)
 
         # Calculate scaling to fit screen width
@@ -100,7 +100,7 @@ class Renderer:
 
         # Check if all levels are completed
         if self.game_state.game_completed():
-            self.game_over_handler.draw_game_over()
+            self.game_over_handler.draw_game_won()
 
         # Check if level is completed
         elif self.game_state.level_won():
