@@ -1,5 +1,6 @@
 import pygame
 from src.views.menu_base import MenuBase
+from src.utils.helper import center_text, center_rect
 
 class NameEntryMenu(MenuBase):
     def __init__(self, display, renderer, scores):
@@ -11,8 +12,7 @@ class NameEntryMenu(MenuBase):
         # Create background for name entry view
         menu_width = 400
         menu_height = 200
-        menu_x = self.display.get_width() // 2 - menu_width // 2
-        menu_y = self.display.get_height() // 2 - menu_height // 2
+        menu_x, menu_y = center_rect(self.display, menu_width, self.display.get_height() // 2 - menu_height // 2)
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
         # Draw text
@@ -21,10 +21,13 @@ class NameEntryMenu(MenuBase):
         name_text = self.menu_font_small.render("Enter your name:", True, (200, 200, 200))
         input_text = self.menu_font_small.render(self.current_name + "_", True, (200, 200, 200))
         
-        text_x = self.display.get_width() // 2 - text.get_width() // 2
-        self.display.blit(text, (text_x, menu_y + 30))
-        self.display.blit(score_text, (text_x, menu_y + 60))
-        self.display.blit(name_text, (text_x, menu_y + 90))
-        self.display.blit(input_text, (text_x, menu_y + 120))
+        text_rect = center_text(self.display, text, menu_y + 30)
+        self.display.blit(text, text_rect)
+        score_rect = center_text(self.display, score_text, menu_y + 60)
+        self.display.blit(score_text, score_rect)
+        name_rect = center_text(self.display, name_text, menu_y + 90)
+        self.display.blit(name_text, name_rect)
+        input_rect = center_text(self.display, input_text, menu_y + 120)
+        self.display.blit(input_text, input_rect)
 
         pygame.display.flip()

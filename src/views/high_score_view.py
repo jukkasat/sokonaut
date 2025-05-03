@@ -1,5 +1,6 @@
 import pygame
 from src.views.menu_base import MenuBase
+from src.utils.helper import center_text, center_rect
 
 class HighScoresMenu(MenuBase):
     def __init__(self, display, renderer, scores):
@@ -15,14 +16,13 @@ class HighScoresMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("HIGH SCORES", True, (255, 130, 0))
-        title_pos = (self.display.get_width() // 2 - title.get_width() // 2, 60)
-        self.display.blit(title, title_pos)
+        title_rect = center_text(self.display, title, 60)
+        self.display.blit(title, title_rect)
 
         # Create background for scores
         menu_width = 400
         menu_height = 476
-        menu_x = self.display.get_width() // 2 - menu_width // 2
-        menu_y = 170
+        menu_x, menu_y = center_rect(self.display, menu_width, 170)
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
         # Draw scores
@@ -48,9 +48,8 @@ class HighScoresMenu(MenuBase):
 
         # Draw back button
         back_text = self.menu_font_small.render("BACK", True, (210, 105, 30))
-        back_x = self.display.get_width() // 2 - back_text.get_width() // 2
-        back_y = menu_y + menu_height - 45
-        self.display.blit(back_text, (back_x, back_y))
+        back_rect = center_text(self.display, back_text, menu_y + menu_height - 45)
+        self.display.blit(back_text, back_rect)
 
         pygame.display.flip()
 
