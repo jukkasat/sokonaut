@@ -8,15 +8,21 @@ class ImageLoader:
         self.level_backgrounds = self._load_level_backgrounds()
         self.game_won_background = self._load_game_won_background()
 
+    def _load_image(self, path, scale=True):
+        """Load an image from the given path and scale it to the display size."""
+        try:
+            image = pygame.image.load(path)
+            if scale:
+                image = pygame.transform.scale(image, (self.display.get_width(), self.display.get_height()))
+            return image
+        except pygame.error as e:
+            print(f"Warning: Could not load image {path}. Error: {e}")
+            return None
+
     def _load_level_backgrounds(self):
         level_backgrounds = []
         for i in range(0, 6):  # Load level_background0.png to level_background6.png
-            try:
-                background_image = pygame.image.load(f"src/img/level_background{i}.png")
-                level_backgrounds.append(pygame.transform.scale(background_image, (self.display.get_width(), self.display.get_height())))
-            except pygame.error as e:
-                print(f"Warning: Could not load level background image {i}. Error: {e}")
-                level_backgrounds.append(None)
+            level_backgrounds.append(self._load_image(f"src/img/level_background{i}.png"))
         return level_backgrounds
     
     def _load_tile_sets(self):
@@ -50,9 +56,4 @@ class ImageLoader:
         return tile_sets
 
     def _load_game_won_background(self):
-        try:
-            background_image = pygame.image.load("src/img/game_won_background.png")
-            return pygame.transform.scale(background_image, (self.display.get_width(), self.display.get_height()))
-        except pygame.error as e:
-            print(f"Warning: Could not load level won background image. Error: {e}")
-            return None
+        return self._load_image("src/img/game_won_background.png")

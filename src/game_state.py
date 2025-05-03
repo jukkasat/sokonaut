@@ -169,3 +169,16 @@ class GameState:
                 if self.map[y][x] == 5:  # Box on target
                     count += 1
         return count
+    
+    def complete_level(self):
+        """Advance to the next level or end the game if all levels are completed."""
+        if self.level_won():
+            if self.current_level < len(self.original_maps) - 1:
+                self.current_level += 1
+                self.map = [row[:] for row in self.original_maps[self.current_level]]
+                self.moves = 0
+                self.level_score = 100
+                return "next_level"  # Indicate that the level was completed
+            else:
+                return "game_completed"  # Indicate that all levels are completed
+        return None

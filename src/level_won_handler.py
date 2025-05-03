@@ -14,11 +14,9 @@ class LevelWonHandler:
         menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
 
         # Draw rounded rectangle with alpha
-        pygame.draw.rect(
-            menu_surface,
-            (50, 50, 50, 216),
-            (0, 0, menu_width, menu_height),
-            border_radius=15
+        pygame.draw.rect(menu_surface,
+            (50, 50, 50, 216),(0, 0, menu_width,
+            menu_height),border_radius=15
         )
 
         # Position the menu background in center
@@ -44,4 +42,3 @@ class LevelWonHandler:
             next_x = self.display.get_width() // 2 - next_text.get_width() // 2
             next_y = menu_y + 130
             self.display.blit(next_text, (next_x, next_y))
-            self.scores.mark_level_completed(self.game_state.current_level)
