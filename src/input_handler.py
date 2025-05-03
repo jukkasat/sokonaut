@@ -35,11 +35,11 @@ class InputHandler:
                     pygame.quit()
                     sys.exit()
                 if event.key == pygame.K_RETURN and self.game_state.level_won():
-                    if self.game_state.current_level < len(self.game_state.maps) - 1:
-                        self.scores.mark_level_completed(self.game_state.current_level)
-                        self.game_state.current_level += 1
-                        self.game_state.map = self.game_state.maps[self.game_state.current_level]
-                        self.game_state.moves = 0
+                    result = self.game_state.complete_level()
+                    if result == "next_level":
+                        self.scores.mark_level_completed(self.game_state.current_level - 1)
+                    elif result == "game_completed":
+                        print("Game Completed!")
 
             if event.type == pygame.QUIT:
                 pygame.quit()
