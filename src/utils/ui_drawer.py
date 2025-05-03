@@ -1,4 +1,5 @@
 import pygame
+from src.utils.helper import center_text
 
 class UIDrawer:
     def __init__(self, display, game_state, font):
@@ -30,3 +31,25 @@ class UIDrawer:
 
         text = self.font.render("F2 = Quit", True, (200, 200, 200))
         self.display.blit(text, (self.display.get_width() - text.get_width() - 25, ui_y))
+
+    def draw_menu(self, menu_width, menu_height, menu_x, menu_y, text, score_text, next_text):
+        menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)
+
+        # Draw rounded rectangle with alpha
+        pygame.draw.rect(menu_surface,
+            (50, 50, 50, 216),(0, 0, menu_width,
+            menu_height),border_radius=15
+        )
+        self.display.blit(menu_surface, (menu_x, menu_y))
+
+        # Draw victory text
+        text_rect = center_text(self.display, text, menu_y + 40)
+        self.display.blit(text, text_rect)
+
+        # Draw level score
+        score_rect = center_text(self.display, score_text, menu_y + 90)
+        self.display.blit(score_text, score_rect)
+
+        # Add Next Level-button if not on last level
+        next_rect = center_text(self.display, next_text, menu_y + 140)
+        self.display.blit(next_text, next_rect)

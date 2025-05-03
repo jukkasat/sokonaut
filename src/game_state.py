@@ -1,4 +1,5 @@
 from src.maps import get_maps
+from src.utils.helper import deep_copy_map
 
 class GameState:
     def __init__(self, audio_manager):
@@ -11,8 +12,8 @@ class GameState:
         self.total_score = 0
         
         # Make a deep copy for gameplay - need to copy each row in each map
-        self.maps = [[row[:] for row in map] for map in self.original_maps]
-        self.map = [row[:] for row in self.original_maps[self.current_level]]
+        self.maps = [deep_copy_map(map) for map in self.original_maps]
+        self.map = [deep_copy_map(self.original_maps[self.current_level])]
         
         # Reset all maps to original state
         self.reset_all_maps()
@@ -20,17 +21,13 @@ class GameState:
         # Update dimensions when loading new map
         self._update_dimensions()
 
-    def _update_dimensions(self):
-        # Update map dimensions after loading a new level
-        self.height = len(self.map)
-        self.width = len(self.map[0])
-
-    def reset_all_maps(self):
-        """Reset all maps to their original state"""
-        # Make fresh deep copies of all maps
-        self.maps = [[row[:] for row in map] for map in self.original_maps]
-        self.map = [row[:] for row in self.original_maps[self.current_level]]
-        self._update_dimensions()
+    def new_game(self):
+        # Reset the game to its initial state
+        self.current_level = 0
+        self.moves = 0
+        self.level_score = 100
+        self.total_score = 0
+        self.reset_all_maps()
 
     def start_level(self, level):
         """Start a specific level"""
@@ -45,34 +42,11 @@ class GameState:
             # Reset ALL maps to their original state
             self.reset_all_maps()
             # Create a deep copy of the map
-            self.map = [row[:] for row in self.original_maps[level]]
+            self.map = deep_copy_map(self.original_maps[level])
             # Update dimensions for the new map
             self._update_dimensions()
             # Also update the maps array with the new map
-            self.maps[level] = [row[:] for row in self.original_maps[level]]
-
-            # self.level_won_sound_played = False
-    
-    def new_game(self):
-        # Reset the game to its initial state
-        self.current_level = 0
-        self.moves = 0
-        self.level_score = 100
-        self.total_score = 0
-        self.reset_all_maps()
-    
-    def find_robo(self):
-        """Find the robot's current position on the map"""
-        # Get current map dimensions
-        height = len(self.map)
-        width = len(self.map[0])
-        
-        # Find the robot's current position on the map
-        for y in range(height):
-            for x in range(width):
-                if self.map[y][x] in [4, 6]:
-                    return (y, x)
-        return None  # Return None if robot not found
+            self.maps[level] = deep_copy_map(self.original_maps[level])
         
     def move(self, move_y, move_x):
         """Move the robot and handle interactions with the environment"""
@@ -135,12 +109,19 @@ class GameState:
             self.level_score += target_bonus
             self.total_score += self.level_score
 
-    def restart_level(self):
-        self.map = [row[:] for row in self.original_maps[self.current_level]]
-        self.moves = 0
-        self.level_score = 100
+    def complete_level(self):
+        """Advance to the next level or end the game if all levels are completed."""
+        if self.level_won():
+            if self.current_level < len(self.original_maps) - 1:
+                self.current_level += 1
+                self.map = [row[:] for row in self.original_maps[self.current_level]]
+                self.moves = 0
+                self.level_score = 100
+                return "next_level"  # Indicate that the level was completed
+            else:
+                return "game_completed"  # Indicate that all levels are completed
+        return None
 
-    
     def level_won(self):
         """Check if all targets are covered by boxes"""
         # First ensure dimensions are up to date
@@ -152,6 +133,11 @@ class GameState:
                 if self.map[y][x] in [2, 6]:
                     return False
         return True
+    
+    def restart_level(self):
+        self.map = [row[:] for row in self.original_maps[self.current_level]]
+        self.moves = 0
+        self.level_score = 100
     
     def game_completed(self):
         """Check if all levels are completed"""
@@ -169,16 +155,28 @@ class GameState:
                 if self.map[y][x] == 5:  # Box on target
                     count += 1
         return count
+
+    def _update_dimensions(self):
+        # Update map dimensions after loading a new level
+        self.height = len(self.map)
+        self.width = len(self.map[0])
+
+    def reset_all_maps(self):
+        """Reset all maps to their original state"""
+        # Make fresh deep copies of all maps
+        self.maps = [deep_copy_map(map) for map in self.original_maps]
+        self.map = deep_copy_map(self.original_maps[self.current_level])
+        self._update_dimensions()
     
-    def complete_level(self):
-        """Advance to the next level or end the game if all levels are completed."""
-        if self.level_won():
-            if self.current_level < len(self.original_maps) - 1:
-                self.current_level += 1
-                self.map = [row[:] for row in self.original_maps[self.current_level]]
-                self.moves = 0
-                self.level_score = 100
-                return "next_level"  # Indicate that the level was completed
-            else:
-                return "game_completed"  # Indicate that all levels are completed
-        return None
+    def find_robo(self):
+        """Find the robot's current position on the map"""
+        # Get current map dimensions
+        height = len(self.map)
+        width = len(self.map[0])
+        
+        # Find the robot's current position on the map
+        for y in range(height):
+            for x in range(width):
+                if self.map[y][x] in [4, 6]:
+                    return (y, x)
+        return None  # Return None if robot not found
