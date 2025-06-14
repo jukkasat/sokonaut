@@ -1,14 +1,18 @@
 import pygame
-import sys
 from src.game_state import GameState
 from src.renderer import Renderer
-from src.handlers.input_handler import InputHandler
 from src.menu import Menu
+from src.state.main_menu_state import MainMenuState
+from src.state.levels_menu_state import LevelsMenuState
+from src.state.highscore_state import HighScoreState
+from src.state.name_entry_state import NameEntryState
+from src.state.game_playing_state import GamePlayingState
+from src.state.level_won_state import LevelWonState
+from src.state.game_won_state import GameWonState
 from src.scores import Scores
 from src.utils.audio_manager import AudioManager
 
 class Sokonaut:
-
     def __init__(self):
         # Initialize pygame and set up the game window
         pygame.init()
@@ -22,8 +26,17 @@ class Sokonaut:
         self.game_state = GameState(self.audio_manager)  # Manages the game state
         self.scores = Scores()
         self.renderer = Renderer(self.game_state, self.display, self.scores)  # Handles rendering
-        self.input_handler = InputHandler(self.game_state, self.scores, self.audio_manager)  # Handles user input
         self.menu = Menu(self.display, self.renderer, self.scores, self.audio_manager)  # Manages the menu
+
+        # Initialize states
+        self.main_menu_state = MainMenuState(self)
+        self.levels_menu_state = LevelsMenuState(self)
+        self.high_score_state = HighScoreState(self)
+        self.name_entry_state = NameEntryState(self)
+        self.game_playing_state = GamePlayingState(self)
+        self.level_won_state = LevelWonState(self)
+        self.game_won_state = GameWonState(self)
+        self.current_state = self.main_menu_state
 
         self.audio_manager.play_music("menu")
         
@@ -32,72 +45,46 @@ class Sokonaut:
 
     def loop(self):
         while True:
-            if self.menu.in_menu:
-                action = self.menu.handle_input()
-                if action == "new_game":
-                    self.game_state.new_game()
+            action = self.current_state.handle_input()
+            if action == "new_game":
+                self.game_state.new_game()
+                self.game_state._update_dimensions()
+                self.renderer.update_scaling()
+                self.current_state = self.game_playing_state
+                self.audio_manager.play_music("level")
+
+            elif action and action.startswith("start_level_"):
+                level = int(action.split("_")[-1])
+                if self.scores.is_level_unlocked(level):
+                    self.game_state.start_level(level)
                     self.game_state._update_dimensions()
                     self.renderer.update_scaling()
-                    self.menu.in_menu = False
+                    self.current_state = self.game_playing_state
                     self.audio_manager.play_music("level")
-                elif action and action.startswith("start_level_"):
-                    level = int(action.split("_")[-1])
-                    if self.scores.is_level_unlocked(level):
-                        self.game_state.start_level(level)
-                        self.game_state._update_dimensions()
-                        self.renderer.update_scaling()
-                        self.menu.in_menu = False
-                        self.audio_manager.play_music("level")
-                    else:
-                        print("Level is locked!")
-                elif action == "high_score":
-                    self.menu.active_menu = "high_score"
-                    self.audio_manager.pause_music()
-                elif action == "levels":
-                    self.menu.active_menu = "levels"
-                    self.audio_manager.pause_music()
-                self.menu.draw()
-            else:
-                action = self.input_handler.handle_events()
-                if action == "return_to_menu":
-                    # Check for high score before returning to menu
-                    if (self.game_state.total_score > 0 and 
-                        self.scores.is_high_score(self.game_state.total_score)):
-                        self.menu.active_menu = "name_entry"
-                        self.menu.name_entry_menu.score = self.game_state.total_score
-                        self.menu.name_entry_menu.current_name = self.menu.current_name
-                        self.menu.draw()
-                        self.audio_manager.pause_music()
+                else:
+                    print("Level is locked!")
 
-                        # Handle name entry input
-                        entering_name = True
-                        while entering_name:
-                            event = pygame.event.wait()
-                            if event.type == pygame.QUIT:
-                                pygame.quit()
-                                sys.exit()
-                            if event.type == pygame.KEYDOWN:
-                                if event.key == pygame.K_BACKSPACE:
-                                    self.menu.name_entry_menu.current_name = self.menu.name_entry_menu.current_name[:-1]
-                                elif event.key == pygame.K_RETURN:
-                                    self.scores.add_score(self.menu.name_entry_menu.current_name, self.game_state.total_score)
-                                    self.menu.current_name = self.menu.name_entry_menu.current_name
-                                    entering_name = False
-                                    self.menu.in_menu = True
-                                    self.menu.active_menu = "main_menu"
-                                    self.audio_manager.play_music("menu")
-                                elif event.key == pygame.K_ESCAPE:
-                                    entering_name = False
-                                    self.menu.in_menu = True
-                                    self.menu.active_menu = "main_menu"
-                                    self.audio_manager.play_music("menu")
-                                elif len(self.menu.name_entry_menu.current_name) < 15:
-                                    if event.unicode.isalnum():
-                                        self.menu.name_entry_menu.current_name += event.unicode
-                            self.menu.draw()
-                    else:
-                        self.menu.in_menu = True
-                        self.menu.active_menu = "main_menu"
-                        self.audio_manager.play_music("menu")
-            if not self.menu.in_menu:
-                self.renderer.draw()
+            elif action == "return_to_menu":
+                if (self.game_state.total_score > 0 and 
+                    self.scores.is_high_score(self.game_state.total_score)):
+                    self.menu.name_entry_menu.score = self.game_state.total_score
+                    self.current_state = self.name_entry_state
+                else:
+                    self.current_state = self.main_menu_state
+                    self.audio_manager.play_music("menu")
+            
+            elif action == "level_won":
+                self.current_state = self.level_won_state
+            
+            elif action == "game_completed":
+                if (self.game_state.total_score > 0 and 
+                    self.scores.is_high_score(self.game_state.total_score)):
+                    self.menu.name_entry_menu.score = self.game_state.total_score
+                    self.current_state = self.name_entry_state
+                else:
+                    self.current_state = self.game_won_state
+
+            elif action == "next_level":
+                self.current_state = self.game_playing_state
+
+            self.current_state.draw()

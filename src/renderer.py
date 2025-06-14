@@ -101,7 +101,6 @@ class Renderer:
         # Check if all levels are completed
         if self.game_state.game_completed():
             self.game_over_handler.draw_game_won()
-
         # Check if level is completed
         elif self.game_state.level_won():
             self.level_won_handler.draw_level_won()
