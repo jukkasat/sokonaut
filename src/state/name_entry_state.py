@@ -5,26 +5,6 @@ class NameEntryState(MenuState):
     def __init__(self, sokonaut):
         super().__init__(sokonaut)
         self.menu = sokonaut.menu.name_entry_menu
-
-    # def handle_input(self):
-    #     event = pygame.event.wait()
-    #     if event.type == pygame.KEYDOWN:
-    #         if event.key == pygame.K_BACKSPACE:
-    #             self.sokonaut.menu.name_entry_menu.current_name = self.sokonaut.menu.name_entry_menu.current_name[:-1]
-    #         elif event.key == pygame.K_RETURN:
-    #             self.sokonaut.scores.add_score(self.sokonaut.menu.name_entry_menu.current_name, self.sokonaut.game_state.total_score)
-    #             self.sokonaut.menu.current_name = self.sokonaut.menu.name_entry_menu.current_name
-    #             self.sokonaut.current_state = self.sokonaut.main_menu_state
-    #             self.sokonaut.audio_manager.play_music("menu")
-    #             return "main_menu"
-    #         elif event.key == pygame.K_ESCAPE:
-    #             self.sokonaut.current_state = self.sokonaut.main_menu_state
-    #             self.sokonaut.audio_manager.play_music("menu")
-    #             return "main_menu"
-    #         elif len(self.sokonaut.menu.name_entry_menu.current_name) < 15:
-    #             if event.unicode.isalnum():
-    #                 self.sokonaut.menu.name_entry_menu.current_name += event.unicode
-    #     return None
     
     def handle_input(self):
         event = pygame.event.wait()
