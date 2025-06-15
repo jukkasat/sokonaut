@@ -30,12 +30,15 @@ class MainMenu(MenuBase):
         menu_x = self.display.get_width() // 2 - menu_width // 2
         menu_y = 210  # Adjust this value to position the menu box
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
-        
+
+        # Store menu item positions for mouse interaction
+        self.menu_item_rects = []
         # Draw menu items
         for i, item in enumerate(self.menu_items):
             color = (210, 105, 30) if i == self.selected_item else (200, 200, 200)
             text = self.menu_font_small.render(item, True, color)
             pos = (self.display.get_width() // 2 - text.get_width() // 2, 250 + i * 50)
+            self.menu_item_rects.append(text.get_rect(topleft=pos))
             self.display.blit(text, pos)
         
         # Update the display
@@ -52,6 +55,24 @@ class MainMenu(MenuBase):
                 self.audio_manager.play_sound("menu_select")
             elif event.key == pygame.K_RETURN:
                 return self.handle_selection()
+            
+        # Handle mouse input
+        elif event.type == pygame.MOUSEMOTION:
+            mouse_pos = pygame.mouse.get_pos()
+            for i, rect in enumerate(self.menu_item_rects):
+                if rect.collidepoint(mouse_pos):
+                    if self.selected_item != i:
+                        self.selected_item = i
+                        self.audio_manager.play_sound("menu_select")
+                    break
+                    
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:  # Left click
+                mouse_pos = pygame.mouse.get_pos()
+                for i, rect in enumerate(self.menu_item_rects):
+                    if rect.collidepoint(mouse_pos):
+                        self.selected_item = i
+                        return self.handle_selection()
         return None
 
     def handle_selection(self):

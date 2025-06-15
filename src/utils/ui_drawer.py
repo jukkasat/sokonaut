@@ -43,13 +43,13 @@ class UIDrawer:
         self.display.blit(menu_surface, (menu_x, menu_y))
 
         # Draw victory text
-        text_rect = center_text(self.display, text, menu_y + 40)
+        text_rect = center_text(self.display, text, menu_y + 50)
         self.display.blit(text, text_rect)
 
         # Draw level score
-        score_rect = center_text(self.display, score_text, menu_y + 90)
+        score_rect = center_text(self.display, score_text, menu_y + 116)
         self.display.blit(score_text, score_rect)
 
         # Add Next Level-button if not on last level
-        next_rect = center_text(self.display, next_text, menu_y + 140)
+        next_rect = center_text(self.display, next_text, menu_y + 160)
         self.display.blit(next_text, next_rect)

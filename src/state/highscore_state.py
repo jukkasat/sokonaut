@@ -7,12 +7,12 @@ class HighScoreState(MenuState):
         self.menu = sokonaut.menu.high_scores_menu
 
     def handle_input(self):
-        event = pygame.event.wait()
-        action = self.sokonaut.menu.high_scores_menu.handle_input(event)
-        if action == "main_menu":
-            self.sokonaut.audio_manager.play_sound("select")
-            self.sokonaut.current_state = self.sokonaut.main_menu_state
-            return None
+        for event in pygame.event.get():
+            action = self.sokonaut.menu.high_scores_menu.handle_input(event)
+            if action == "main_menu":
+                self.sokonaut.audio_manager.play_sound("select")
+                self.sokonaut.current_state = self.sokonaut.main_menu_state
+                return None
         return None
 
     def draw(self):

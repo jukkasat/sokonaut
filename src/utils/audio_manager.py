@@ -41,16 +41,8 @@ class AudioManager:
                 self.sounds.move_to_end(name)
 
             if self.sounds[name]:
-                self.sounds[name].play()
+                self.sounds[name].play(maxtime=0)
                 self._manage_cache()
-
-    def _manage_cache(self):
-        """Remove the least recently used sound if the cache is full"""
-        if len(self.sounds) > self.cache_size:
-            # Get the least recently used sound (the first item in the ordered dict)
-            lru_sound_name, lru_sound = self.sounds.popitem(last=False)
-            print(f"Unloading sound: {lru_sound_name}")
-            del lru_sound  # Remove the sound from memory
 
     def _load_music(self):
         try:
@@ -67,6 +59,14 @@ class AudioManager:
                 pygame.mixer.music.stop()  # Stop the current music
             pygame.mixer.music.load(self.music[name])
             pygame.mixer.music.play(loop)
+
+    def _manage_cache(self):
+        """Remove the least recently used sound if the cache is full"""
+        if len(self.sounds) > self.cache_size:
+            # Get the least recently used sound (the first item in the ordered dict)
+            lru_sound_name, lru_sound = self.sounds.popitem(last=False)
+            print(f"Unloading sound: {lru_sound_name}")
+            del lru_sound  # Remove the sound from memory
 
     def stop_music(self):
         pygame.mixer.music.stop()
