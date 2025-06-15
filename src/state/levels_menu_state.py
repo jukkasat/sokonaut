@@ -7,15 +7,15 @@ class LevelsMenuState(MenuState):
         self.menu = sokonaut.menu.levels_menu
 
     def handle_input(self):
-        event = pygame.event.wait()
-        action = self.sokonaut.menu.levels_menu.handle_input(event)
-        if action == "main_menu":
-            self.sokonaut.audio_manager.play_sound("select")
-            self.sokonaut.current_state = self.sokonaut.main_menu_state
-            return None
-        elif action is not None:
-            self.sokonaut.audio_manager.play_sound("select")
-            return action
+        for event in pygame.event.get():
+            action = self.sokonaut.menu.levels_menu.handle_input(event)
+            if action == "main_menu":
+                self.sokonaut.audio_manager.play_sound("select")
+                self.sokonaut.current_state = self.sokonaut.main_menu_state
+                return None
+            elif action is not None:
+                self.sokonaut.audio_manager.play_sound("select")
+                return action
         return None
 
     def draw(self):
