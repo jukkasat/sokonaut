@@ -1,7 +1,6 @@
 import pygame
 from src.state.state import State
 
-
 class LevelWonState(State):
     def __init__(self, sokonaut):
         super().__init__(sokonaut)
@@ -17,6 +16,7 @@ class LevelWonState(State):
                     result = self.sokonaut.game_state.complete_level()
                     if result == "next_level":
                         self.sokonaut.scores.mark_level_completed(self.sokonaut.game_state.current_level - 1)
+                        self.sokonaut.audio_manager.play_music("level")
                         return "next_level"
                     elif result == "game_completed":
                         return "game_completed"

@@ -47,19 +47,24 @@ class GameState:
             self._update_dimensions()
             # Also update the maps array with the new map
             self.maps[level] = deep_copy_map(self.original_maps[level])
+            
+    def find_robo(self):
+        """Find the robot's current position on the map"""
+        # Get current map dimensions
+        height = len(self.map)
+        width = len(self.map[0])
         
+        # Find the robot's current position on the map
+        for y in range(height):
+            for x in range(width):
+                if self.map[y][x] in [4, 6]:
+                    return (y, x)
+        return None  # Return None if robot not found
+    
     def move(self, move_y, move_x):
         """Move the robot and handle interactions with the environment"""
-
-        # Check if level is won - prevent movement if true
-        if self.level_won():
-            return
         
         # Find robot position
-        robot_pos = self.find_robo()
-        if not robot_pos:
-            return  # Return if robot not found
-
         robo_old_y, robo_old_x = self.find_robo()
         robo_new_y = robo_old_y + move_y
         robo_new_x = robo_old_x + move_x
@@ -168,15 +173,3 @@ class GameState:
         self.map = deep_copy_map(self.original_maps[self.current_level])
         self._update_dimensions()
     
-    def find_robo(self):
-        """Find the robot's current position on the map"""
-        # Get current map dimensions
-        height = len(self.map)
-        width = len(self.map[0])
-        
-        # Find the robot's current position on the map
-        for y in range(height):
-            for x in range(width):
-                if self.map[y][x] in [4, 6]:
-                    return (y, x)
-        return None  # Return None if robot not found
