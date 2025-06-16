@@ -6,10 +6,11 @@ from src.utils.helper import center_text, center_rect
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores, audio_manager):
         super().__init__(display, renderer, scores)
-        self.menu_items = ["New Game", "Levels", "High Score", "Quit"]
+        self.menu_items = ["new game", "levels", "high score", "quit"]
         self.selected_item = 0
         self.background_image = self.load_menu_background()
         self.audio_manager = audio_manager
+        self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
         
     def draw(self):
         # Clear the screen
@@ -21,7 +22,7 @@ class MainMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("SOKONAUT", True, (255, 130, 0))
-        title_rect = center_text(self.display, title, 80)
+        title_rect = center_text(self.display, title, 100)
         self.display.blit(title, title_rect)
         
         # Create a surface for the menu background with alpha channel
@@ -78,13 +79,13 @@ class MainMenu(MenuBase):
     def handle_selection(self):
         # Handle selection in the main menu
         selected = self.menu_items[self.selected_item]
-        if selected == "New Game":
+        if selected == "new game":
             return "new_game"
-        elif selected == "Levels":
+        elif selected == "levels":
             return "levels"
-        elif selected == "High Score":
+        elif selected == "high score":
             return "high_score"
-        elif selected == "Quit":
+        elif selected == "quit":
             pygame.quit()
             sys.exit()
         return None

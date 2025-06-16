@@ -14,12 +14,10 @@ class Renderer:
         self.ui_drawer = UIDrawer(display, game_state, self.font)
         self.game_over_handler = GameWonHandler(display, game_state, self.font, self.image_loader, self.ui_drawer)
         self.level_won_handler = LevelWonHandler(display, game_state, self.font, scores, self.ui_drawer)
-
-        # Calculate scaling to fit screen width
-        self.scale_factor = self.display.get_width() / (self.game_state.width * self.image_loader.images[0].get_width())
-
-        # Initial scaling
-        self.scale_factor = self.display.get_width() / (self.game_state.width * self.image_loader.images[0].get_width())
+        
+        # Calculate scaling based on the first tile
+        base_width = self.images[0].get_width()
+        self.scale_factor = self.display.get_width() / (self.game_state.width * base_width)
         self.tile_size = int(self.image_loader.images[0].get_width() * self.scale_factor)
         self.offset_x = 0
         self.offset_y = (self.display.get_height() - (self.game_state.height * self.tile_size)) // 2
@@ -42,7 +40,6 @@ class Renderer:
         return scaled_images
 
     def draw(self):
-
         # Update scaling if map dimensions have changed
         if (self.game_state.width != self.prev_map_width or
             self.game_state.height != self.prev_map_height):

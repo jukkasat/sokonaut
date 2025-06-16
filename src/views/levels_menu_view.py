@@ -21,7 +21,7 @@ class LevelsMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("LEVELS", True, (255, 130, 0))
-        title_rect = center_text(self.display, title, 80)
+        title_rect = center_text(self.display, title, 100)
         self.display.blit(title, title_rect)
         
         # Create levels view background
