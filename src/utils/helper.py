@@ -1,5 +1,3 @@
-import pygame
-
 def center_text(surface, text, y):
     """Centers text horizontally on the surface at the given y-coordinate."""
     text_rect = text.get_rect(center=(surface.get_width() // 2, y))

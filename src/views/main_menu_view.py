@@ -1,7 +1,7 @@
 import pygame
 import sys
 from src.views.menu_base import MenuBase
-from src.utils.helper import center_text, center_rect
+from src.utils.helper import center_text
 
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores, audio_manager):

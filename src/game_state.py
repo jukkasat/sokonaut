@@ -40,10 +40,10 @@ class GameState:
             self.reset_all_maps()
             # Create a deep copy of the map
             self.map = deep_copy_map(self.original_maps[level])
-            # Update dimensions for the new map
-            self._update_dimensions()
             # Also update the maps array with the new map
             self.maps[level] = deep_copy_map(self.original_maps[level])
+            # Update dimensions for the new map
+            self._update_dimensions()
             
     def find_robo(self):
         """Find the robot's current position on the map"""
@@ -168,4 +168,3 @@ class GameState:
         self.maps = [deep_copy_map(map) for map in self.original_maps]
         self.map = deep_copy_map(self.original_maps[self.current_level])
         self._update_dimensions()
-    
