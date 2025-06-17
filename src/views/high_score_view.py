@@ -16,7 +16,7 @@ class HighScoresMenu(MenuBase):
 
         # Draw title
         title = self.menu_font.render("HIGH SCORES", True, (255, 130, 0))
-        title_rect = center_text(self.display, title, 60)
+        title_rect = center_text(self.display, title, 100)
         self.display.blit(title, title_rect)
 
         # Create background for scores

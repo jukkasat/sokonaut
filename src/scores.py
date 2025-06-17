@@ -1,11 +1,20 @@
-import json
 import os
+import sys
+import json
 
 class Scores:
     def __init__(self):
         self.scores = []
-        self.score_file = "highscores.json"
-        self.levels_file = "levels_unlocked.json"
+
+        # Get base path for both dev and packaged environments
+        if getattr(sys, 'frozen', False): # Running as packaged exe
+            self.base_path = sys._MEIPASS 
+        else: # Running in development
+            self.base_path = os.path.dirname(os.path.dirname(__file__))
+            
+        self.score_file = os.path.join(self.base_path, "highscores.json")
+        self.levels_file = os.path.join(self.base_path, "levels_unlocked.json")
+        
         self.load_scores()
         self.completed_levels = set()
         self.load_completed_levels()

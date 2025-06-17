@@ -1,3 +1,5 @@
+import os
+import sys
 import pygame
 from collections import OrderedDict
 
@@ -5,33 +7,44 @@ class AudioManager:
     def __init__(self):
         pygame.mixer.init()
         self.sounds = OrderedDict()
-        self.sound_paths = {
-            "move": "src/audio/move.ogg",
-            "select": "src/audio/menu_confirm.ogg",
-            "level_won": "src/audio/level_won.ogg",
-            "barrel_ready": "src/audio/barrel_ready_effect.ogg",
-            "menu_select":  "src/audio/menu_select.ogg",
-            "level_select": "src/audio/level_select.ogg"
-        }
         self.music = {}
-        self.music_paths = {
-            "menu": "src/audio/menu_music.ogg",
-            "level": "src/audio/level_music.ogg"
-        }
         self._load_all_sounds()
         self._load_music()
-        # self.cache_size = cache_size
+
+    def _get_base_path(self):
+        """Helper method to determine the correct image directory path"""
+        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
+            return os.path.join(sys._MEIPASS, "src", "audio")
+        return os.path.join(os.path.dirname(__file__), "..", "audio") # Running in development
 
     def _load_all_sounds(self):
-        """Load all sounds at once"""
-        for name, path in self.sound_paths.items():
-            try:
-                sound = pygame.mixer.Sound(path)
-                sound.set_volume(0.2)
-                self.sounds[name] = sound
-            except pygame.error as e:
-                print(f"Could not load sound {path}: {e}")
-                self.sounds[name] = None
+        """Load all sound effects into memory."""
+        base_path = self._get_base_path()
+
+        # Dictionary to store our sound effects
+        self.sounds = {
+            'move': os.path.join(base_path, "move.ogg"),
+            'level_select': os.path.join(base_path, "level_select.ogg"),
+            'level_won': os.path.join(base_path, "level_won.ogg"),
+            'menu_select': os.path.join(base_path, "menu_select.ogg"),
+            'select': os.path.join(base_path, "menu_confirm.ogg"),
+            'barrel_ready': os.path.join(base_path, "barrel_ready_effect.ogg"),
+            'level_select': os.path.join(base_path, "level_select.ogg")
+        }
+
+        # Load each sound file
+        try:
+            for sound_name, path in self.sounds.items():
+                if os.path.exists(path):
+                    self.sounds[sound_name] = pygame.mixer.Sound(path)
+                    self.sounds[sound_name].set_volume(0.2)
+                else:
+                    print(f"Warning: Sound file not found: {path}")
+        except Exception as e:
+            print(f"Error loading sounds: {str(e)}")
+            # Initialize with None if loading fails
+            self.sounds = {name: None for name in self.sounds}
+
 
     def play_sound(self, name):
         """Play a sound if it exists"""
@@ -39,13 +52,27 @@ class AudioManager:
             self.sounds[name].play()
 
     def _load_music(self):
+        base_path = self._get_base_path()
+
+        # Dictionary to store the music files
+        self.music = {
+            "menu": os.path.join(base_path, "menu_music.ogg"),
+            "level": os.path.join(base_path, "level_music.ogg")
+        }
+
+        # Load each music file
         try:
-            for name, path in self.music_paths.items():
-                pygame.mixer.music.load(path)
-                pygame.mixer.music.set_volume(0.1)
-                self.music[name] = path  # Store the loaded music
-        except pygame.error as e:
-            print(f"Could not load music: {e}")
+            for name, path in self.music.items():
+                if os.path.exists(path):
+                    self.music[name] = pygame.mixer.music.load(path)
+                    pygame.mixer.music.set_volume(0.1)
+                    self.music[name] = path
+                else:
+                    print(f"Warning: Sound file not found: {path}")
+        except Exception as e:
+            print(f"Error loading sounds: {str(e)}")
+            # Initialize with None if loading fails
+            self.sounds = {name: None for name in self.sounds}
 
     def play_music(self, name, loop=-1):
         if name in self.music:

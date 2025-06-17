@@ -7,19 +7,16 @@ class GameState:
         self.moves = 0
         self.original_maps = get_maps()
         self.audio_manager = audio_manager
-
         self.level_score = 100
         self.total_score = 0
-        
-        # Make a deep copy for gameplay - need to copy each row in each map
+            
+        # Make deep copies for gameplay
         self.maps = [deep_copy_map(map) for map in self.original_maps]
-        self.map = [deep_copy_map(self.original_maps[self.current_level])]
-        
-        # Reset all maps to original state
-        self.reset_all_maps()
-
-        # Update dimensions when loading new map
-        self._update_dimensions()
+        self.map = deep_copy_map(self.original_maps[self.current_level])
+            
+        # Set initial dimensions
+        self.height = len(self.map)
+        self.width = len(self.map[0])
 
     def new_game(self):
         # Reset the game to its initial state
@@ -43,10 +40,10 @@ class GameState:
             self.reset_all_maps()
             # Create a deep copy of the map
             self.map = deep_copy_map(self.original_maps[level])
-            # Update dimensions for the new map
-            self._update_dimensions()
             # Also update the maps array with the new map
             self.maps[level] = deep_copy_map(self.original_maps[level])
+            # Update dimensions for the new map
+            self._update_dimensions()
             
     def find_robo(self):
         """Find the robot's current position on the map"""
@@ -63,7 +60,6 @@ class GameState:
     
     def move(self, move_y, move_x):
         """Move the robot and handle interactions with the environment"""
-        
         # Find robot position
         robo_old_y, robo_old_x = self.find_robo()
         robo_new_y = robo_old_y + move_y
@@ -172,4 +168,3 @@ class GameState:
         self.maps = [deep_copy_map(map) for map in self.original_maps]
         self.map = deep_copy_map(self.original_maps[self.current_level])
         self._update_dimensions()
-    

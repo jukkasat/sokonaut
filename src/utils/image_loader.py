@@ -1,3 +1,5 @@
+import os
+import sys
 import pygame
 
 class ImageLoader:
@@ -8,6 +10,12 @@ class ImageLoader:
         self.level_backgrounds = self._load_level_backgrounds()
         self.game_won_background = self._load_game_won_background()
 
+    def _get_base_path(self):
+        """Helper method to determine the correct image directory path"""
+        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
+            return os.path.join(sys._MEIPASS, "src", "img")
+        return os.path.join(os.path.dirname(__file__), "..", "img")
+
     def _load_image(self, path, scale=True):
         """Load an image from the given path and scale it to the display size."""
         try:
@@ -16,44 +24,63 @@ class ImageLoader:
                 image = pygame.transform.scale(image, (self.display.get_width(), self.display.get_height()))
             return image
         except pygame.error as e:
-            print(f"Warning: Could not load image {path}. Error: {e}")
+            print(f"Warning: Could not load image {path}. Error: {str(e)}")
             return None
 
-    def _load_level_backgrounds(self):
-        level_backgrounds = []
-        for i in range(0, 6):  # Load level_background0.png to level_background6.png
-            level_backgrounds.append(self._load_image(f"src/img/level_background{i}.png"))
-        return level_backgrounds
-    
     def _load_tile_sets(self):
+        """Load all tile sets into memory."""
         tile_sets = []
-        for i in range(6):  # Load floor0.png/wall0.png to floor5.png/wall5.png
-            images = []
-            try:
-                floor_image = pygame.image.load(f"src/img/floor{i}.png")
-                images.append(floor_image)
-                wall_image = pygame.image.load(f"src/img/wall{i}.png")
-                images.append(wall_image)
-                target_image = pygame.image.load(f"src/img/target{i}.png")
-                images.append(target_image)
-                barrel_image = pygame.image.load(f"src/img/barrel{i}.png")
-                images.append(barrel_image)
-                player_image = pygame.image.load(f"src/img/player{i}.png")
-                images.append(player_image)
-                ready_image = pygame.image.load(f"src/img/ready{i}.png")
-                images.append(ready_image)
-                robotarget_image = pygame.image.load(f"src/img/robotarget{i}.png")
-                images.append(robotarget_image)
-            except pygame.error as e:
-                print(f"Warning: Could not load tile set {i}. Error: {e}")
-                # Append None for each image in the set to maintain index consistency
-                images = [None] * 7
-            tile_sets.append(images)
+        base_path = self._get_base_path()
+        
+        try:
+            for i in range(6):  # 6 tile sets (0-5)
+                images = []
+                
+                # Load each image type
+                floor_path = os.path.join(base_path, f"floor{i}.png")
+                wall_path = os.path.join(base_path, f"wall{i}.png")
+                target_path = os.path.join(base_path, f"target{i}.png")
+                barrel_path = os.path.join(base_path, f"barrel{i}.png")
+                player_path = os.path.join(base_path, f"player{i}.png")
+                ready_path = os.path.join(base_path, f"ready{i}.png")
+                robotarget_path = os.path.join(base_path, f"robotarget{i}.png")
 
-        if not tile_sets:
-            raise RuntimeError("No tile sets were loaded. Ensure the image files exist in 'src/img/'.")
+                images.append(pygame.image.load(floor_path))
+                images.append(pygame.image.load(wall_path))
+                images.append(pygame.image.load(target_path))
+                images.append(pygame.image.load(barrel_path))
+                images.append(pygame.image.load(player_path))
+                images.append(pygame.image.load(ready_path))
+                images.append(pygame.image.load(robotarget_path))
 
+                tile_sets.append(images)
+        except Exception as e:
+            print(f"Error loading images: {str(e)}")
+            return []
+            
         return tile_sets
 
+    def _load_level_backgrounds(self):
+        """Load all level background images."""
+        level_backgrounds = []
+        base_path = self._get_base_path()
+        
+        try:
+            for i in range(0, 6):  # 6 set of level backgrounds 
+                image_path = os.path.join(base_path, f"level_background{i}.png")
+                level_backgrounds.append(self._load_image(image_path))
+            return level_backgrounds
+        except Exception as e:
+            print(f"Error loading level backgrounds: {str(e)}")
+            return []
+
     def _load_game_won_background(self):
-        return self._load_image("src/img/game_won_background.png")
+        """Load the game won background image."""
+        base_path = self._get_base_path()
+        
+        try:
+            image_path = os.path.join(base_path, "game_won_background.png")
+            return self._load_image(image_path)
+        except Exception as e:
+            print(f"Error loading game won background: {str(e)}")
+            return None
