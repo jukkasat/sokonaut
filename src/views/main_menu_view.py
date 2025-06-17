@@ -6,7 +6,7 @@ from src.utils.helper import center_text
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores, audio_manager):
         super().__init__(display, renderer, scores)
-        self.menu_items = ["new game", "levels", "high score", "quit"]
+        self.menu_items = ["new game", "levels", "high score", "credits", "quit"]
         self.selected_item = 0
         self.background_image = self.load_menu_background()
         self.audio_manager = audio_manager
@@ -85,6 +85,8 @@ class MainMenu(MenuBase):
             return "levels"
         elif selected == "high score":
             return "high_score"
+        elif selected == "credits":
+            return "credits"
         elif selected == "quit":
             pygame.quit()
             sys.exit()

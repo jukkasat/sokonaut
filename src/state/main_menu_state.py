@@ -22,6 +22,10 @@ class MainMenuState(MenuState):
                 self.sokonaut.audio_manager.play_sound("select")
                 self.sokonaut.current_state = self.sokonaut.high_score_state
                 return None
+            elif action == "credits":
+                self.sokonaut.audio_manager.play_sound("select")
+                self.sokonaut.current_state = self.sokonaut.credits_state
+                return None
             elif action is not None:
                 self.sokonaut.audio_manager.play_sound("select")
                 return action

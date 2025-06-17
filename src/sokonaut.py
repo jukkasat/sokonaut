@@ -9,6 +9,7 @@ from src.state.name_entry_state import NameEntryState
 from src.state.game_playing_state import GamePlayingState
 from src.state.level_won_state import LevelWonState
 from src.state.game_won_state import GameWonState
+from src.state.credits_state import CreditsState
 from src.scores import Scores
 from src.utils.audio_manager import AudioManager
 
@@ -36,7 +37,9 @@ class Sokonaut:
         self.game_playing_state = GamePlayingState(self)
         self.level_won_state = LevelWonState(self)
         self.game_won_state = GameWonState(self)
+        self.credits_state = CreditsState(self)
         self.current_state = self.main_menu_state
+        
 
         self.audio_manager.play_music("menu")
         
