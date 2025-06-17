@@ -39,7 +39,6 @@ class Sokonaut:
         self.game_won_state = GameWonState(self)
         self.credits_state = CreditsState(self)
         self.current_state = self.main_menu_state
-        
 
         self.audio_manager.play_music("menu")
         
@@ -54,7 +53,8 @@ class Sokonaut:
                 self.game_state._update_dimensions()
                 self.renderer.update_scaling()
                 self.current_state = self.game_playing_state
-                self.audio_manager.play_music("level")
+                if self.audio_manager.sound_enabled:
+                    self.audio_manager.play_music("level")
 
             elif action and action.startswith("start_level_"):
                 level = int(action.split("_")[-1])
@@ -63,7 +63,8 @@ class Sokonaut:
                     self.game_state._update_dimensions()
                     self.renderer.update_scaling()
                     self.current_state = self.game_playing_state
-                    self.audio_manager.play_music("level")
+                    if self.audio_manager.sound_enabled:
+                        self.audio_manager.play_music("level")
                 else:
                     print("Level is locked!")
 

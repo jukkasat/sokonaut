@@ -58,6 +58,12 @@ class MenuBase:
         )
         self.display.blit(menu_surface, (x, y))
 
+    def _get_base_path(self):
+        """Helper method to determine the correct image directory path"""
+        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
+            return os.path.join(sys._MEIPASS, "src", "img")
+        return os.path.join(os.path.dirname(__file__), "..", "img")
+
     def handle_input(self, event):
         pass
 
