@@ -8,14 +8,9 @@ class AudioManager:
         pygame.mixer.init()
         self.sounds = OrderedDict()
         self.music = {}
+        self.sound_enabled = True
         self._load_all_sounds()
         self._load_music()
-
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "audio")
-        return os.path.join(os.path.dirname(__file__), "..", "audio") # Running in development
 
     def _load_all_sounds(self):
         """Load all sound effects into memory."""
@@ -75,11 +70,27 @@ class AudioManager:
             self.sounds = {name: None for name in self.sounds}
 
     def play_music(self, name, loop=-1):
-        if name in self.music:
+        if name in self.music and self.sound_enabled:
             if pygame.mixer.music.get_busy():  # Check if music is already playing
                 pygame.mixer.music.stop()  # Stop the current music
             pygame.mixer.music.load(self.music[name])
             pygame.mixer.music.play(loop)
+
+    def toggle_audio(self, enabled):
+        """Toggle all audio on/off"""
+        self.sound_enabled = enabled
+        if enabled:
+            self.unpause_music()
+            # Reset all sound volumes
+            for sound in self.sounds.values():
+                if isinstance(sound, pygame.mixer.Sound):
+                    sound.set_volume(0.2)
+        else:
+            self.pause_music()
+            # Mute all sounds
+            for sound in self.sounds.values():
+                if isinstance(sound, pygame.mixer.Sound):
+                    sound.set_volume(0)
 
     def stop_music(self):
         pygame.mixer.music.stop()
@@ -89,3 +100,9 @@ class AudioManager:
 
     def unpause_music(self):
         pygame.mixer.music.unpause()
+
+    def _get_base_path(self):
+        """Helper method to determine the correct image directory path"""
+        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
+            return os.path.join(sys._MEIPASS, "src", "audio")
+        return os.path.join(os.path.dirname(__file__), "..", "audio") # Running in development

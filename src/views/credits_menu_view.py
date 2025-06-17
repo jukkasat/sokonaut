@@ -9,12 +9,6 @@ class CreditsMenu(MenuBase):
         super().__init__(display, renderer, scores)
         self.background_image = self.load_menu_background()
 
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "img")
-        return os.path.join(os.path.dirname(__file__), "..", "img")
-
     def draw(self):
         self.display.fill((0, 0, 0))
 

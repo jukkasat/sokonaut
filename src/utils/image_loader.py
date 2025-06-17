@@ -10,12 +10,6 @@ class ImageLoader:
         self.level_backgrounds = self._load_level_backgrounds()
         self.game_won_background = self._load_game_won_background()
 
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "img")
-        return os.path.join(os.path.dirname(__file__), "..", "img")
-
     def _load_image(self, path, scale=True):
         """Load an image from the given path and scale it to the display size."""
         try:
@@ -84,3 +78,9 @@ class ImageLoader:
         except Exception as e:
             print(f"Error loading game won background: {str(e)}")
             return None
+        
+    def _get_base_path(self):
+        """Helper method to determine the correct image directory path"""
+        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
+            return os.path.join(sys._MEIPASS, "src", "img")
+        return os.path.join(os.path.dirname(__file__), "..", "img")

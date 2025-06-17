@@ -1,5 +1,6 @@
-import pygame
+import os
 import sys
+import pygame
 from src.views.menu_base import MenuBase
 from src.utils.helper import center_text
 
@@ -11,7 +12,20 @@ class MainMenu(MenuBase):
         self.background_image = self.load_menu_background()
         self.audio_manager = audio_manager
         self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
-        
+        self.music_enabled = True
+
+        # Load music control icons
+        try:
+            self.audio_on_icon = pygame.image.load(self._get_base_path() + "/audio_on.png")
+            self.audio_off_icon = pygame.image.load(self._get_base_path() + "/audio_off.png")
+            icon_size = (74, 74)  # size
+            self.audio_on_icon = pygame.transform.scale(self.audio_on_icon, icon_size)
+            self.audio_off_icon = pygame.transform.scale(self.audio_off_icon, icon_size)
+        except:
+            print("Could not load music control icons")
+            self.audio_on_icon = None
+            self.audio_off_icon = None
+
     def draw(self):
         # Clear the screen
         self.display.fill((0, 0, 0))
@@ -42,6 +56,13 @@ class MainMenu(MenuBase):
             self.menu_item_rects.append(text.get_rect(topleft=pos))
             self.display.blit(text, pos)
         
+        # Draw music control icon in bottom right corner
+        if self.audio_on_icon and self.audio_off_icon:
+            icon = self.audio_on_icon if self.music_enabled else self.audio_off_icon
+            icon_pos = (self.display.get_width() - 110, self.display.get_height() - 110)
+            self.music_icon_rect = icon.get_rect(topleft=icon_pos)
+            self.display.blit(icon, icon_pos)
+
         # Update the display
         pygame.display.flip()
 
@@ -68,12 +89,21 @@ class MainMenu(MenuBase):
                     break
                     
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left click
+            if event.button == 1:  # Mouse left click
                 mouse_pos = pygame.mouse.get_pos()
+
+                # Check menu item clicks
                 for i, rect in enumerate(self.menu_item_rects):
                     if rect.collidepoint(mouse_pos):
                         self.selected_item = i
                         return self.handle_selection()
+                    
+                # Check music icon click
+                if hasattr(self, 'music_icon_rect') and self.music_icon_rect.collidepoint(mouse_pos):
+                    self.music_enabled = not self.music_enabled
+                    self.audio_manager.toggle_audio(self.music_enabled)
+                    if self.music_enabled:
+                        self.audio_manager.play_sound("select")
         return None
 
     def handle_selection(self):
@@ -91,3 +121,4 @@ class MainMenu(MenuBase):
             pygame.quit()
             sys.exit()
         return None
+    
