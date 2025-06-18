@@ -3,13 +3,12 @@ class State:
         self.sokonaut = sokonaut
         self.display = sokonaut.display
 
-    def handle_input(self):
-        pass
-
-    def draw(self):
-        pass
-
     def _return_to_menu(self):
-        self.sokonaut.current_state = self.sokonaut.main_menu_state
-        self.sokonaut.audio_manager.play_music("menu")
-        return "return_to_menu"
+        """Check for high score and return appropriate action"""
+        if (self.sokonaut.game_state.total_score > 0 and 
+            self.sokonaut.scores.is_high_score(self.sokonaut.game_state.total_score)):
+            self.sokonaut.menu.name_entry_view.score = self.sokonaut.game_state.total_score
+            self.sokonaut.current_state = self.sokonaut.name_entry_state
+        else:
+            self.sokonaut.current_state = self.sokonaut.main_menu_state
+            self.sokonaut.audio_manager.play_music("menu")

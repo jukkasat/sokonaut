@@ -63,9 +63,3 @@ class MenuBase:
         if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
             return os.path.join(sys._MEIPASS, "src", "img")
         return os.path.join(os.path.dirname(__file__), "..", "img")
-
-    def handle_input(self, event):
-        pass
-
-    def draw(self):
-        pass

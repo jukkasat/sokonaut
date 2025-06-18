@@ -1,7 +1,7 @@
 from src.views.menu_base import MenuBase
 from src.utils.helper import center_text, center_rect
 
-class NameEntryMenu(MenuBase):
+class NameEntryView(MenuBase):
     def __init__(self, display, renderer, scores):
         super().__init__(display, renderer, scores)
         self.current_name = ""

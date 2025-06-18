@@ -11,7 +11,6 @@ a = Analysis(
         # Python modules
         ('src/audio/*.ogg', 'src/audio'),
         ('src/img/*.png', 'src/img'),
-        ('src/handlers/*.py', 'src/handlers'),
         ('src/utils/*.py', 'src/utils'),
         ('src/views/*.py', 'src/views'),
         ('src/*.py', 'src'),

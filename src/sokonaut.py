@@ -27,7 +27,7 @@ class Sokonaut:
         self.game_state = GameState(self.audio_manager)  # Manages the game state
         self.scores = Scores()
         self.renderer = Renderer(self.game_state, self.display, self.scores)  # Handles rendering
-        self.menu = Menu(self.display, self.renderer, self.scores, self.audio_manager)  # Manages the menu
+        self.menu = Menu(self.display, self.renderer, self.scores)  # Manages the menu
 
         # Initialize states
         self.main_menu_state = MainMenuState(self)
@@ -47,6 +47,11 @@ class Sokonaut:
 
     def loop(self):
         while True:
+
+            # DEBUG Print current state name
+            state_name = self.current_state.__class__.__name__
+            print(f"Current State: {state_name}")
+            
             action = self.current_state.handle_input()
             if action == "new_game":
                 self.game_state.new_game()
