@@ -3,13 +3,14 @@ from src.views.menu_base import MenuBase
 from src.utils.helper import center_text, center_rect
 
 class LevelsMenu(MenuBase):
-    def __init__(self, display, renderer, scores, audio_manager):
+    def __init__(self, display, renderer, scores):
         super().__init__(display, renderer, scores)
         self.levels_per_column = 11
         self.total_levels = 22
         self.selected_level = 0
         self.background_image = self.load_menu_background()
-        self.audio_manager = audio_manager
+        self.level_rects = [] # Store level button positions for mouse interaction
+        self.back_rect = None
 
     def draw(self):
         # Clear the screen
