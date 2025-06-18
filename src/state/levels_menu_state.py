@@ -37,8 +37,7 @@ class LevelsMenuState(MenuState):
                 
                 if event.key == pygame.K_RETURN:
                     if self.menu.selected_level == -1:  # Back button selected
-                        self.audio_manager.play_sound("select")
-                        self.sokonaut.current_state = self.sokonaut.main_menu_state
+                        self._return_to_menu()
                         return "main_menu"
                     elif (self.sokonaut.scores.is_level_unlocked(self.menu.selected_level)):
                         self.audio_manager.play_sound("select")
@@ -46,8 +45,7 @@ class LevelsMenuState(MenuState):
                         self.sokonaut.current_state = self.sokonaut.game_playing_state
                         return f"start_level_{self.menu.selected_level}"
                 if event.key == pygame.K_ESCAPE:
-                    self.audio_manager.play_sound("select")
-                    self.sokonaut.current_state = self.sokonaut.main_menu_state
+                    self._return_to_menu()
             
             # Handle mouse input
             if event.type == pygame.MOUSEMOTION:

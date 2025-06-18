@@ -1,8 +1,8 @@
 import pygame
 from src.utils.image_loader import ImageLoader
 from src.utils.ui_drawer import UIDrawer
-from src.handlers.game_won_handler import GameWonHandler
-from src.handlers.level_won_handler import LevelWonHandler
+from src.views.game_won_view import GameWonView
+from src.views.level_won_view import LevelWonView
 
 class Renderer:
     def __init__(self, game_state, display, scores):
@@ -12,8 +12,8 @@ class Renderer:
         self.images = self.image_loader.images
         self.font = pygame.font.SysFont("Arial", 24)
         self.ui_drawer = UIDrawer(display, game_state, self.font)
-        self.game_over_handler = GameWonHandler(display, game_state, self.font, self.image_loader, self.ui_drawer)
-        self.level_won_handler = LevelWonHandler(display, game_state, self.font, scores, self.ui_drawer)
+        self.game_won_view = GameWonView(display, game_state, self.font, self.image_loader, self.ui_drawer)
+        self.level_won_view = LevelWonView(display, game_state, self.font, scores, self.ui_drawer)
         
         # Calculate scaling based on the first tile
         base_width = self.images[0].get_width()
@@ -97,10 +97,10 @@ class Renderer:
 
         # Check if all levels are completed
         if self.game_state.game_completed():
-            self.game_over_handler.draw_game_won()
+            self.game_won_view.draw()
         # Check if level is completed
         elif self.game_state.level_won():
-            self.level_won_handler.draw_level_won()
+            self.level_won_view.draw()
 
     def update_scaling(self):
         """Update scaling factors when map dimensions change"""

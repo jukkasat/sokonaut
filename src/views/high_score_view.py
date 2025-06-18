@@ -2,10 +2,11 @@ import pygame
 from src.views.menu_base import MenuBase
 from src.utils.helper import center_text, center_rect
 
-class HighScoresMenu(MenuBase):
+class HighScoresView(MenuBase):
     def __init__(self, display, renderer, scores):
         super().__init__(display, renderer, scores)
         self.background_image = self.load_menu_background()
+        self.back_rect = None
 
     def draw(self):
         self.display.fill((0, 0, 0))
@@ -48,19 +49,6 @@ class HighScoresMenu(MenuBase):
 
         # Draw and store back button position for mouse interaction
         back_text = self.menu_font_small.render("BACK", True, (210, 105, 30))
-        back_rect = center_text(self.display, back_text, menu_y + menu_height - 35)
-        self.back_rect = back_text.get_rect(topleft=(back_rect.x, back_rect.y))
-        self.display.blit(back_text, back_rect)
-
-    def handle_input(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
-                return "main_menu"
-            
-        # Handle mouse input
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Left click
-                mouse_pos = pygame.mouse.get_pos()
-                if self.back_rect.collidepoint(mouse_pos):
-                    return "main_menu"
-        return None
+        self.back_rect = center_text(self.display, back_text, menu_y + menu_height - 35)
+        self.back_rect = back_text.get_rect(topleft=(self.back_rect.x, self.back_rect.y))
+        self.display.blit(back_text, self.back_rect)

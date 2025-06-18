@@ -7,19 +7,27 @@ class LevelWonState(State):
 
     def handle_input(self):
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 return self._return_to_menu()
+            
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_F2, pygame.K_ESCAPE):
                     return self._return_to_menu()
+                
                 elif event.key == pygame.K_RETURN:
                     return self._handle_next_level()
                     
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
                 # Check if next level text was clicked
-                if (self.sokonaut.renderer.level_won_handler.next_level_rect and 
-                    self.sokonaut.renderer.level_won_handler.next_level_rect.collidepoint(event.pos)):
+                if (self.sokonaut.renderer.level_won_view.next_level_rect and 
+                    self.sokonaut.renderer.level_won_view.next_level_rect.collidepoint(x, y)):
                     return self._handle_next_level()
+
+                if self.sokonaut.renderer.ui_drawer.quit_rect and \
+                self.sokonaut.renderer.ui_drawer.quit_rect.collidepoint((x, y)):
+                    self._return_to_menu()
 
         return None
 

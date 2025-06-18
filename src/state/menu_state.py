@@ -5,8 +5,6 @@ class MenuState(State):
         super().__init__(sokonaut)
         self.in_menu = True
 
-    def handle_input(self):
-        pass
-
-    def draw(self):
-        pass
+    def _return_to_menu(self):
+        self.sokonaut.audio_manager.play_sound("select")
+        self.sokonaut.current_state = self.sokonaut.main_menu_state

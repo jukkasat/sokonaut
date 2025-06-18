@@ -4,14 +4,14 @@ from src.views.menu_base import MenuBase
 from src.utils.helper import center_text
 
 class MainMenu(MenuBase):
-    def __init__(self, display, renderer, scores, audio_manager):
+    def __init__(self, display, renderer, scores):
         super().__init__(display, renderer, scores)
         self.menu_items = ["new game", "levels", "high score", "credits", "quit"]
         self.selected_item = 0
         self.background_image = self.load_menu_background()
-        self.audio_manager = audio_manager
         self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
         self.music_enabled = True
+        self.menu_item_rects = [] # Store menu item positions for mouse interaction
 
         # Load music control icons
         try:
@@ -45,8 +45,6 @@ class MainMenu(MenuBase):
         menu_y = 210  # Adjust this value to position the menu box
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
-        # Store menu item positions for mouse interaction
-        self.menu_item_rects = []
         # Draw menu items
         for i, item in enumerate(self.menu_items):
             color = (210, 105, 30) if i == self.selected_item else (200, 200, 200)
@@ -61,66 +59,3 @@ class MainMenu(MenuBase):
             icon_pos = (self.display.get_width() - 110, self.display.get_height() - 110)
             self.music_icon_rect = icon.get_rect(topleft=icon_pos)
             self.display.blit(icon, icon_pos)
-
-    def handle_input(self, event):
-        # Handle input for the main menu
-        if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                sys.exit()
-            if event.key == pygame.K_UP:
-                self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-                self.audio_manager.play_sound("menu_select")
-            elif event.key == pygame.K_DOWN:
-                self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-                self.audio_manager.play_sound("menu_select")
-            elif event.key == pygame.K_RETURN:
-                return self.handle_selection()
-            
-        # Handle mouse input
-        elif event.type == pygame.MOUSEMOTION:
-            mouse_pos = pygame.mouse.get_pos()
-            for i, rect in enumerate(self.menu_item_rects):
-                if rect.collidepoint(mouse_pos):
-                    if self.selected_item != i:
-                        self.selected_item = i
-                        self.audio_manager.play_sound("menu_select")
-                    break
-                    
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Mouse left click
-                mouse_pos = pygame.mouse.get_pos()
-
-                # Check menu item clicks
-                for i, rect in enumerate(self.menu_item_rects):
-                    if rect.collidepoint(mouse_pos):
-                        self.selected_item = i
-                        return self.handle_selection()
-                    
-                # Check music icon click
-                if hasattr(self, 'music_icon_rect') and self.music_icon_rect.collidepoint(mouse_pos):
-                    self.music_enabled = not self.music_enabled
-                    self.audio_manager.toggle_audio(self.music_enabled)
-                    if self.music_enabled:
-                        self.audio_manager.play_sound("select")
-        return None
-
-    def handle_selection(self):
-        # Handle selection in the main menu
-        selected = self.menu_items[self.selected_item]
-        if selected == "new game":
-            return "new_game"
-        elif selected == "levels":
-            return "levels"
-        elif selected == "high score":
-            return "high_score"
-        elif selected == "credits":
-            return "credits"
-        elif selected == "quit":
-            pygame.quit()
-            sys.exit()
-        return None
-    
