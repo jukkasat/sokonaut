@@ -1,3 +1,4 @@
+import sys
 import pygame
 from src.state.menu_state import MenuState
 
@@ -8,6 +9,9 @@ class NameEntryState(MenuState):
     
     def handle_input(self):
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
                     self.sokonaut.menu.name_entry_menu.current_name = self.sokonaut.menu.name_entry_menu.current_name[:-1]

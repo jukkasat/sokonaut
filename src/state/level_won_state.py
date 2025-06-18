@@ -7,19 +7,31 @@ class LevelWonState(State):
 
     def handle_input(self):
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return self._return_to_menu()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_F2:
-                    self.sokonaut.current_state = self.sokonaut.main_menu_state
-                    self.sokonaut.audio_manager.play_music("menu")
-                    return "return_to_menu"
+                if event.key in (pygame.K_F2, pygame.K_ESCAPE):
+                    return self._return_to_menu()
                 elif event.key == pygame.K_RETURN:
-                    result = self.sokonaut.game_state.complete_level()
-                    if result == "next_level":
-                        self.sokonaut.scores.mark_level_completed(self.sokonaut.game_state.current_level - 1)
-                        self.sokonaut.audio_manager.play_music("level")
-                        return "next_level"
-                    elif result == "game_completed":
-                        return "game_completed"
+                    return self._handle_next_level()
+                    
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Check if next level text was clicked
+                if (self.sokonaut.renderer.level_won_handler.next_level_rect and 
+                    self.sokonaut.renderer.level_won_handler.next_level_rect.collidepoint(event.pos)):
+                    return self._handle_next_level()
+
+        return None
+
+    def _handle_next_level(self):
+        """Helper method to handle next level logic"""
+        result = self.sokonaut.game_state.complete_level()
+        if result == "next_level":
+            self.sokonaut.scores.mark_level_completed(self.sokonaut.game_state.current_level - 1)
+            self.sokonaut.audio_manager.play_music("level")
+            return "next_level"
+        elif result == "game_completed":
+            return "game_completed"
         return None
 
     def draw(self):

@@ -1,4 +1,3 @@
-import pygame
 from src.views.menu_base import MenuBase
 from src.utils.helper import center_text, center_rect
 
@@ -29,5 +28,3 @@ class NameEntryMenu(MenuBase):
         self.display.blit(name_text, name_rect)
         input_rect = center_text(self.display, input_text, menu_y + 120)
         self.display.blit(input_text, input_rect)
-
-        pygame.display.flip()

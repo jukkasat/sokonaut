@@ -91,4 +91,8 @@ class Sokonaut:
             elif action == "next_level":
                 self.current_state = self.game_playing_state
 
+            # Draw current state
             self.current_state.draw()
+
+            # Display update
+            pygame.display.flip()
