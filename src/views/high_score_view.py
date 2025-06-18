@@ -48,15 +48,13 @@ class HighScoresMenu(MenuBase):
 
         # Draw and store back button position for mouse interaction
         back_text = self.menu_font_small.render("BACK", True, (210, 105, 30))
-        back_rect = center_text(self.display, back_text, menu_y + menu_height - 45)
+        back_rect = center_text(self.display, back_text, menu_y + menu_height - 35)
         self.back_rect = back_text.get_rect(topleft=(back_rect.x, back_rect.y))
         self.display.blit(back_text, back_rect)
 
-        pygame.display.flip()
-
     def handle_input(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
+            if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
                 return "main_menu"
             
         # Handle mouse input

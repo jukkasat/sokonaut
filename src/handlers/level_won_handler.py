@@ -9,6 +9,7 @@ class LevelWonHandler:
         self.scores = scores
         self.ui_drawer = ui_drawer
         self.large_font = pygame.font.SysFont("Arial", 36)
+        self.next_level_rect = None
 
     def draw_level_won(self):
         # Create a semi-transparent background box for text
@@ -18,7 +19,11 @@ class LevelWonHandler:
 
         text = self.large_font.render("Congrats, level won!", True, (210, 105, 30))
         score_text = self.font.render(f"SCORE: {self.game_state.level_score}", True, (200, 200, 200))
+
         if self.game_state.current_level < len(self.game_state.maps) - 1:
             next_text = self.font.render("Press ENTER to start next level", True, (200, 200, 200))
+            # Store the rect for click detection
+            self.next_level_rect = next_text.get_rect(center=(self.display.get_width() // 2, menu_y + 160))
+
 
         self.ui_drawer.draw_menu(menu_width, menu_height, menu_x, menu_y, text, score_text, next_text)

@@ -6,6 +6,8 @@ class UIDrawer:
         self.display = display
         self.game_state = game_state
         self.font = font
+        self.restart_rect = None
+        self.quit_rect = None
 
     def draw_ui(self):
         # Draw semi-transparent strip at the bottom
@@ -17,20 +19,26 @@ class UIDrawer:
         # Draw UI elements below the game field
         ui_y = self.display.get_height() - 35  # Position 35 pixels from the bottom
 
-        text = self.font.render(f"Level: {self.game_state.current_level}", True, (200, 200, 200))
-        self.display.blit(text, (25, ui_y))
+        level_text = self.font.render(f"Level: {self.game_state.current_level}", True, (200, 200, 200))
+        self.display.blit(level_text, (25, ui_y))
 
-        text = self.font.render(f"Moves: {self.game_state.moves}", True, (210, 105, 30))
-        self.display.blit(text, (150, ui_y))
+        moves_text = self.font.render(f"Moves: {self.game_state.moves}", True, (210, 105, 30))
+        self.display.blit(moves_text, (150, ui_y))
 
-        text = self.font.render(f"score: {self.game_state.total_score}", True, (200, 200, 200))
-        self.display.blit(text, (self.display.get_width() // 2 - text.get_width() // 2, ui_y))
+        score_text = self.font.render(f"score: {self.game_state.total_score}", True, (200, 200, 200))
+        self.display.blit(score_text, (self.display.get_width() // 2 - score_text.get_width() // 2, ui_y))
 
-        text = self.font.render("F3 = Restart", True, (200, 200, 200))
-        self.display.blit(text, (self.display.get_width() - text.get_width() - 170, ui_y))
+        # Store restart text rect for click detection
+        restart_text = self.font.render("F3 = Restart", True, (200, 200, 200))
+        restart_pos = (self.display.get_width() - restart_text.get_width() - 170, ui_y)
+        self.restart_rect = restart_text.get_rect(topleft=restart_pos)
+        self.display.blit(restart_text, restart_pos)
 
-        text = self.font.render("F2 = Quit", True, (200, 200, 200))
-        self.display.blit(text, (self.display.get_width() - text.get_width() - 25, ui_y))
+        # Store quit text rect for click detection  
+        quit_text = self.font.render("F2 = Quit", True, (200, 200, 200))
+        quit_pos = (self.display.get_width() - quit_text.get_width() - 25, ui_y)
+        self.quit_rect = quit_text.get_rect(topleft=quit_pos)
+        self.display.blit(quit_text, quit_pos)
 
     def draw_menu(self, menu_width, menu_height, menu_x, menu_y, text, score_text, next_text):
         menu_surface = pygame.Surface((menu_width, menu_height), pygame.SRCALPHA)

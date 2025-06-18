@@ -1,4 +1,3 @@
-import os
 import sys
 import pygame
 from src.views.menu_base import MenuBase
@@ -63,12 +62,15 @@ class MainMenu(MenuBase):
             self.music_icon_rect = icon.get_rect(topleft=icon_pos)
             self.display.blit(icon, icon_pos)
 
-        # Update the display
-        pygame.display.flip()
-
     def handle_input(self, event):
         # Handle input for the main menu
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
             if event.key == pygame.K_UP:
                 self.selected_item = (self.selected_item - 1) % len(self.menu_items)
                 self.audio_manager.play_sound("menu_select")

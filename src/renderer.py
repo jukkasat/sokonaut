@@ -102,8 +102,6 @@ class Renderer:
         elif self.game_state.level_won():
             self.level_won_handler.draw_level_won()
 
-        pygame.display.flip()
-
     def update_scaling(self):
         """Update scaling factors when map dimensions change"""
         # Get current map dimensions
