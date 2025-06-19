@@ -1,6 +1,6 @@
 import pygame
 from src.views.menu_base import MenuBase
-from src.utils.helper import center_text
+from src.utils.helper import center_text, get_base_path
 
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores):
@@ -14,8 +14,8 @@ class MainMenu(MenuBase):
 
         # Load music control icons
         try:
-            self.audio_on_icon = pygame.image.load(self._get_base_path() + "/audio_on.png")
-            self.audio_off_icon = pygame.image.load(self._get_base_path() + "/audio_off.png")
+            self.audio_on_icon = pygame.image.load(get_base_path("img") + "/audio_on.png")
+            self.audio_off_icon = pygame.image.load(get_base_path("img") + "/audio_off.png")
             icon_size = (74, 74)  # size
             self.audio_on_icon = pygame.transform.scale(self.audio_on_icon, icon_size)
             self.audio_off_icon = pygame.transform.scale(self.audio_off_icon, icon_size)

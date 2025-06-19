@@ -1,23 +1,15 @@
 import os
-import sys
 import json
 import pygame
 from collections import OrderedDict
+from src.utils.helper import get_base_path
 
 class AudioManager:
     def __init__(self):
         pygame.mixer.init()
         self.sounds = OrderedDict()
         self.music = {}
-
-        # Determine correct path for settings.json
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            base_path = os.path.join(sys._MEIPASS)
-        else:  # Running in development
-            # base_path = os.path.dirname(os.path.dirname(__file__))
-            base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))  # yksi .. lisää
-
-        self.settings_path = os.path.join(base_path, "settings.json")
+        self.settings_path = get_base_path("settings.json")
         self.sound_enabled = self._load_audio_setting()
 
         self._load_all_sounds()
@@ -48,7 +40,7 @@ class AudioManager:
 
     def _load_all_sounds(self):
         """Load all sound effects into memory."""
-        base_path = self._get_base_path()
+        base_path = get_base_path("audio")
 
         # Dictionary to store our sound effects
         self.sounds = {
@@ -61,8 +53,8 @@ class AudioManager:
             'level_select': os.path.join(base_path, "level_select.ogg")
         }
 
-        # Load each sound file
         try:
+            # Load each sound file
             for sound_name, path in self.sounds.items():
                 if os.path.exists(path):
                     self.sounds[sound_name] = pygame.mixer.Sound(path)
@@ -75,7 +67,7 @@ class AudioManager:
             self.sounds = {name: None for name in self.sounds}
 
     def _load_music(self):
-        base_path = self._get_base_path()
+        base_path = get_base_path("audio")
 
         # Dictionary to store the music files
         self.music = {
@@ -83,8 +75,8 @@ class AudioManager:
             "level": os.path.join(base_path, "level_music.ogg")
         }
 
-        # Load each music file
         try:
+            # Load each music file
             for name, path in self.music.items():
                 if os.path.exists(path):
                     self.music[name] = pygame.mixer.music.load(path)
@@ -132,9 +124,3 @@ class AudioManager:
             for sound in self.sounds.values():
                 if isinstance(sound, pygame.mixer.Sound):
                     sound.set_volume(0)
-
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "audio")
-        return os.path.join(os.path.dirname(__file__), "..", "audio") # Running in development

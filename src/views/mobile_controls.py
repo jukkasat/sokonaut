@@ -74,19 +74,19 @@ class MobileControls:
         )
 
     def _draw_button(self, rect, text, offset=False):
-        """Helper method to draw a single button with text"""
+        """draw a single button with text"""
         # Create adjusted rect for surface drawing
         surface_rect = rect.copy()
         surface_rect.x -= self.padding
         surface_rect.y -= (self.display.get_height() - self.controls_surface.get_height())
         
         # Draw button background and border
-        pygame.draw.rect(self.controls_surface, (50, 50, 50, 128), surface_rect, border_radius=20)
-        pygame.draw.rect(self.controls_surface, (200, 200, 200), surface_rect, 2, border_radius=20)
+        pygame.draw.rect(self.controls_surface, (50, 50, 50, 128), surface_rect, border_radius=24)
+        pygame.draw.rect(self.controls_surface, (200, 105, 30), surface_rect, 1, border_radius=24)
         
         # Draw text
         font = pygame.font.SysFont("Arial", 36)
-        text_surface = font.render(text, True, (200, 200, 200))
+        text_surface = font.render(text, True, (220, 220, 220))
         text_rect = text_surface.get_rect(center=surface_rect.center)
         self.controls_surface.blit(text_surface, text_rect)
 

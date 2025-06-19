@@ -51,9 +51,6 @@ sokonaut/
    python main.py
    ```
 
-3. **Enjoy the Game**:
-   Use the keyboard (or mouse, if implemented) to play the game.
-
 ## Building the Game with PyInstaller
 
 To build the game as a standalone executable using PyInstaller, follow these steps:
@@ -70,6 +67,8 @@ To build the game as a standalone executable using PyInstaller, follow these ste
 
 3. The built executable will be located in the `dist` directory.
 
-## Contributing
+## Debugging
 
-Feel free to contribute to the project by submitting pull requests or reporting issues. Planned improvements are listed above, but additional ideas are welcome!
+   Add following statements to sokonaut.py loop start to debug state changes
+      state_name = self.current_state.__class__.__name__
+      print(f"Current State: {state_name}")

@@ -1,6 +1,6 @@
 import os
-import sys
 import pygame
+from src.utils.helper import get_base_path
 
 class MenuBase:
     def __init__(self, display, renderer, scores):
@@ -29,22 +29,16 @@ class MenuBase:
 
     def load_menu_background(self):
         """Load menu background from either development or packaged path"""
-        # Get base path for both dev and packaged environments
-        if hasattr(sys, 'frozen'): # Running as packaged exe
-            base_path = os.path.join(sys._MEIPASS)
-        else: # Running in development
-            base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-        path = os.path.join(base_path, "src", "img", "menu_background.png")
+        background_path = os.path.join(get_base_path("img"), "menu_background.png")
 
         try:
-            if os.path.exists(path):
-                background_image = pygame.image.load(path)
+            if os.path.exists(background_path):
+                background_image = pygame.image.load(background_path)
                 return pygame.transform.scale(background_image, 
                     (self.display.get_width(), self.display.get_height())
                 )
         except pygame.error as e:
-            print(f"Could not load background from {path}. Error: {e}")
+            print(f"Could not load background from {background_path}. Error: {e}")
 
         return None
         
@@ -58,8 +52,3 @@ class MenuBase:
         )
         self.display.blit(menu_surface, (x, y))
 
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "img")
-        return os.path.join(os.path.dirname(__file__), "..", "img")

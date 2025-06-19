@@ -47,10 +47,6 @@ class Sokonaut:
 
     def loop(self):
         while True:
-
-            # DEBUG Print current state name
-            state_name = self.current_state.__class__.__name__
-            print(f"Current State: {state_name}")
             
             action = self.current_state.handle_input()
             if action == "new_game":
