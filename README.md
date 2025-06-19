@@ -54,6 +54,22 @@ sokonaut/
 3. **Enjoy the Game**:
    Use the keyboard (or mouse, if implemented) to play the game.
 
+## Building the Game with PyInstaller
+
+To build the game as a standalone executable using PyInstaller, follow these steps:
+
+1. Make sure you have [PyInstaller](https://pyinstaller.org/) installed:
+   ```
+   pip install pyinstaller
+   ```
+
+2. Run PyInstaller with the provided `sokonaut.spec` file:
+   ```
+   pyinstaller sokonaut.spec
+   ```
+
+3. The built executable will be located in the `dist` directory.
+
 ## Contributing
 
 Feel free to contribute to the project by submitting pull requests or reporting issues. Planned improvements are listed above, but additional ideas are welcome!
