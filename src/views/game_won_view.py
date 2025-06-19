@@ -9,6 +9,7 @@ class GameWonView:
         self.image_loader = image_loader
         self.ui_drawer = ui_drawer
         self.large_font = pygame.font.SysFont("Arial", 36)
+        self.menu_text_rect = None
 
     def draw(self):
         # Draw game won background
@@ -24,3 +25,5 @@ class GameWonView:
         menu_text = self.font.render("Enter to Main menu", True, (200, 200, 200))
 
         self.ui_drawer.draw_menu(menu_width, menu_height, menu_x, menu_y, text, score_text, menu_text)
+        # Save menu_text rect for click detection
+        self.menu_text_rect = menu_text.get_rect(center=(self.display.get_width() // 2, menu_y + 160))
