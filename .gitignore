@@ -1,3 +1,6 @@
 __pycache__/
 wip
 levels_unlocked.json
+.vscode
+build
+dist
