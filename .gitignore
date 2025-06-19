@@ -1,6 +1,7 @@
 __pycache__/
 wip
 levels_unlocked.json
+settings.json
 .vscode
 build
 dist

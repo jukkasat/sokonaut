@@ -76,7 +76,7 @@ class Sokonaut:
             elif action == "return_to_menu":
                 if (self.game_state.total_score > 0 and 
                     self.scores.is_high_score(self.game_state.total_score)):
-                    self.menu.name_entry_menu.score = self.game_state.total_score
+                    self.menu.name_entry_view.score = self.game_state.total_score
                     self.current_state = self.name_entry_state
                 else:
                     self.current_state = self.main_menu_state
@@ -88,7 +88,7 @@ class Sokonaut:
             elif action == "game_completed":
                 if (self.game_state.total_score > 0 and 
                     self.scores.is_high_score(self.game_state.total_score)):
-                    self.menu.name_entry_menu.score = self.game_state.total_score
+                    self.menu.name_entry_view.score = self.game_state.total_score
                     self.current_state = self.name_entry_state
                 else:
                     self.current_state = self.game_won_state
