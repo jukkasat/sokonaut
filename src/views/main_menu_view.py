@@ -1,4 +1,3 @@
-import sys
 import pygame
 from src.views.menu_base import MenuBase
 from src.utils.helper import center_text
@@ -10,8 +9,8 @@ class MainMenu(MenuBase):
         self.selected_item = 0
         self.background_image = self.load_menu_background()
         self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
-        self.music_enabled = True
         self.menu_item_rects = [] # Store menu item positions for mouse interaction
+        self.music_icon_rect = None
 
         # Load music control icons
         try:
@@ -53,9 +52,10 @@ class MainMenu(MenuBase):
             self.menu_item_rects.append(text.get_rect(topleft=pos))
             self.display.blit(text, pos)
         
+        audio_on = self.renderer.game_state.audio_manager.sound_enabled
         # Draw music control icon in bottom right corner
         if self.audio_on_icon and self.audio_off_icon:
-            icon = self.audio_on_icon if self.music_enabled else self.audio_off_icon
+            icon = self.audio_on_icon if audio_on else self.audio_off_icon
             icon_pos = (self.display.get_width() - 110, self.display.get_height() - 110)
             self.music_icon_rect = icon.get_rect(topleft=icon_pos)
             self.display.blit(icon, icon_pos)

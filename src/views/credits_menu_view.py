@@ -28,7 +28,7 @@ class CreditsMenu(MenuBase):
 
         # Draw credits text
         credits_text = [
-            "Developer",
+            "developer",
             "jukkas",
             "",
             "For more games donate with Bolt 12"
