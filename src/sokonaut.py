@@ -54,7 +54,7 @@ class Sokonaut:
                 self.game_state._update_dimensions()
                 self.renderer.update_scaling()
                 self.current_state = self.game_playing_state
-                if self.audio_manager.sound_enabled:
+                if self.audio_manager.audio_enabled:
                     self.audio_manager.play_music("level")
 
             elif action and action.startswith("start_level_"):
@@ -64,7 +64,7 @@ class Sokonaut:
                     self.game_state._update_dimensions()
                     self.renderer.update_scaling()
                     self.current_state = self.game_playing_state
-                    if self.audio_manager.sound_enabled:
+                    if self.audio_manager.audio_enabled:
                         self.audio_manager.play_music("level")
                 else:
                     print("Level is locked!")

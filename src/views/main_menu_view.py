@@ -10,7 +10,7 @@ class MainMenu(MenuBase):
         self.background_image = self.load_menu_background()
         self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
         self.menu_item_rects = [] # Store menu item positions for mouse interaction
-        self.music_icon_rect = None
+        self.audio_icon_rect = None
         self.audio_on_icon, self.audio_off_icon = get_audio_icons()
 
     def draw(self):
@@ -42,8 +42,8 @@ class MainMenu(MenuBase):
             self.display.blit(text, pos)
 
         # Draw an audio control in the bottom right corner
-        audio_on = self.renderer.game_state.audio_manager.sound_enabled
+        audio_on = self.renderer.game_state.audio_manager.audio_enabled
         icon = self.audio_on_icon if audio_on else self.audio_off_icon
         icon_pos = (self.display.get_width() - 105, self.display.get_height() - 120)
-        self.music_icon_rect = icon.get_rect(topleft=icon_pos)
+        self.audio_icon_rect = icon.get_rect(topleft=icon_pos)
         self.display.blit(icon, icon_pos)

@@ -66,10 +66,10 @@ class GamePlayingState(State):
                     return self._return_to_menu()
                 
                 # Audio-control clicks
-                if self.sokonaut.renderer.music_icon_rect and self.sokonaut.renderer.music_icon_rect.collidepoint((x, y)):
+                if self.sokonaut.renderer.audio_icon_rect and self.sokonaut.renderer.audio_icon_rect.collidepoint((x, y)):
                     audio_manager = self.sokonaut.audio_manager
-                    audio_manager.toggle_audio(not audio_manager.sound_enabled)
-                    if audio_manager.sound_enabled:
+                    audio_manager.toggle_audio(not audio_manager.audio_enabled)
+                    if audio_manager.audio_enabled:
                         audio_manager.play_music("level")
                         audio_manager.play_sound("select")
                     return None
