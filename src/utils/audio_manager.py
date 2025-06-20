@@ -10,12 +10,12 @@ class AudioManager:
         self.sounds = OrderedDict()
         self.music = {}
         self.settings_path = get_base_path("settings.json")
-        self.sound_enabled = self._load_audio_setting()
+        self.audio_enabled = self._load_audio_setting()
 
         self._load_all_sounds()
         self._load_music()
 
-        if not self.sound_enabled:
+        if not self.audio_enabled:
             for sound in self.sounds.values():
                 if isinstance(sound, pygame.mixer.Sound):
                     sound.set_volume(0)
@@ -32,7 +32,7 @@ class AudioManager:
 
     def _save_audio_setting(self):
         try:
-            settings = {"audio_on": self.sound_enabled}
+            settings = {"audio_on": self.audio_enabled}
             with open(self.settings_path, "w") as f:
                 json.dump(settings, f)
         except Exception as e:
@@ -95,7 +95,7 @@ class AudioManager:
             self.sounds[name].play()
 
     def play_music(self, name, loop=-1):
-        if name in self.music and self.sound_enabled:
+        if name in self.music and self.audio_enabled:
             if pygame.mixer.music.get_busy():  # Check if music is already playing
                 pygame.mixer.music.stop()  # Stop the current music
             pygame.mixer.music.load(self.music[name])
@@ -112,7 +112,7 @@ class AudioManager:
 
     def toggle_audio(self, enabled):
         """Toggle all audio on/off"""
-        self.sound_enabled = enabled
+        self.audio_enabled = enabled
         self._save_audio_setting()
         if enabled:
             self.unpause_music()

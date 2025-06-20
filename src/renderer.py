@@ -32,7 +32,7 @@ class Renderer:
         self.prev_map_width = self.game_state.width
         self.prev_map_height = self.game_state.height
 
-        self.music_icon_rect = None
+        self.audio_icon_rect = None
         self.audio_on_icon, self.audio_off_icon = get_audio_icons()        
 
     def _scale_images(self):
@@ -98,10 +98,10 @@ class Renderer:
                 self.display.blit(self.scaled_images[tile], (pos_x, pos_y))
 
         # Draw an audio control in the bottom right corner
-        audio_on = self.game_state.audio_manager.sound_enabled
+        audio_on = self.game_state.audio_manager.audio_enabled
         icon = self.audio_on_icon if audio_on else self.audio_off_icon
         icon_pos = (self.display.get_width() - 100, self.display.get_height() - 130)
-        self.music_icon_rect = icon.get_rect(topleft=icon_pos)
+        self.audio_icon_rect = icon.get_rect(topleft=icon_pos)
         self.display.blit(icon, icon_pos)
 
         self.ui_drawer.draw_ui()

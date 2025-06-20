@@ -50,10 +50,10 @@ class MainMenuState(MenuState):
                             action = self._handle_selection()
 
                     # Check music icon click
-                    if self.menu.music_icon_rect and self.menu.music_icon_rect.collidepoint(mouse_pos):
-                        was_off = not self.audio_manager.sound_enabled
-                        self.audio_manager.toggle_audio(not self.audio_manager.sound_enabled)
-                        if self.audio_manager.sound_enabled:
+                    if self.menu.audio_icon_rect and self.menu.audio_icon_rect.collidepoint(mouse_pos):
+                        was_off = not self.audio_manager.audio_enabled
+                        self.audio_manager.toggle_audio(not self.audio_manager.audio_enabled)
+                        if self.audio_manager.audio_enabled:
                             self.audio_manager.play_music("menu")
                             self.audio_manager.play_sound("select")
 

@@ -20,9 +20,9 @@ class GameWonView:
         menu_height = 220
         menu_x, menu_y = center_rect(self.display, menu_width, self.display.get_height() // 2 - menu_height // 2)
 
-        text = self.large_font.render("Game won, good job!", True, (210, 105, 30))
+        text = self.large_font.render("You beat the game, good job!", True, (210, 105, 30))
         score_text = self.font.render(f"TOTAL SCORE: {self.game_state.total_score}", True, (200, 200, 200))
-        menu_text = self.font.render("Enter to Main menu", True, (200, 200, 200))
+        menu_text = self.font.render("Enter to main menu", True, (200, 200, 200))
 
         self.ui_drawer.draw_menu(menu_width, menu_height, menu_x, menu_y, text, score_text, menu_text)
         # Save menu_text rect for click detection

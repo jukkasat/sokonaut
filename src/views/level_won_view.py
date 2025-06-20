@@ -17,11 +17,11 @@ class LevelWonView:
         menu_height = 220
         menu_x, menu_y = center_rect(self.display, menu_width, self.display.get_height() // 2 - menu_height // 2)
 
-        text = self.large_font.render("Congrats, level won!", True, (210, 105, 30))
+        text = self.large_font.render("gongrats, level won!", True, (210, 105, 30))
         score_text = self.font.render(f"SCORE: {self.game_state.level_score}", True, (200, 200, 200))
 
         if self.game_state.current_level < len(self.game_state.maps) - 1:
-            next_text = self.font.render("Press ENTER to start next level", True, (200, 200, 200))
+            next_text = self.font.render("press ENTER to start next level", True, (200, 200, 200))
             # Store the rect for click detection
             self.next_level_rect = next_text.get_rect(center=(self.display.get_width() // 2, menu_y + 160))
 
