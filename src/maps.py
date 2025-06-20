@@ -1,19 +1,13 @@
 import json
 import os
-import sys
+from src.utils.helper import get_base_path
 
 def get_maps():
     maps = []
 
     """Load maps from maps.json file"""
     try:
-        # Determine correct path for maps.json
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            base_path = os.path.join(sys._MEIPASS)
-        else:  # Running in development
-            base_path = os.path.dirname(os.path.dirname(__file__))
-
-        maps_path = os.path.join(base_path, "maps.json")
+        maps_path = get_base_path("maps.json")
         
         if not os.path.exists(maps_path):
             raise FileNotFoundError(f"maps.json not found at {maps_path}")

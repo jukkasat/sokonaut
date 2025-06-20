@@ -8,7 +8,7 @@ class GameWonView:
         self.font = font
         self.image_loader = image_loader
         self.ui_drawer = ui_drawer
-        self.large_font = pygame.font.SysFont("Arial", 36)
+        self.large_font = pygame.font.SysFont("bahnschrift", 36)
         self.menu_text_rect = None
 
     def draw(self):

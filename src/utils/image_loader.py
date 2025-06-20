@@ -1,6 +1,6 @@
 import os
-import sys
 import pygame
+from src.utils.helper import get_base_path
 
 class ImageLoader:
     def __init__(self, display):
@@ -24,7 +24,7 @@ class ImageLoader:
     def _load_tile_sets(self):
         """Load all tile sets into memory."""
         tile_sets = []
-        base_path = self._get_base_path()
+        base_path = get_base_path("img")
         
         try:
             for i in range(6):  # 6 tile sets (0-5)
@@ -57,7 +57,7 @@ class ImageLoader:
     def _load_level_backgrounds(self):
         """Load all level background images."""
         level_backgrounds = []
-        base_path = self._get_base_path()
+        base_path = get_base_path("img")
         
         try:
             for i in range(0, 6):  # 6 set of level backgrounds 
@@ -70,7 +70,7 @@ class ImageLoader:
 
     def _load_game_won_background(self):
         """Load the game won background image."""
-        base_path = self._get_base_path()
+        base_path = get_base_path("img")
         
         try:
             image_path = os.path.join(base_path, "game_won_background.png")
@@ -78,9 +78,3 @@ class ImageLoader:
         except Exception as e:
             print(f"Error loading game won background: {str(e)}")
             return None
-        
-    def _get_base_path(self):
-        """Helper method to determine the correct image directory path"""
-        if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-            return os.path.join(sys._MEIPASS, "src", "img")
-        return os.path.join(os.path.dirname(__file__), "..", "img")

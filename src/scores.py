@@ -1,19 +1,13 @@
 import os
-import sys
 import json
+from src.utils.helper import get_base_path
 
 class Scores:
     def __init__(self):
         self.scores = []
-
-        # Get base path for both dev and packaged environments
-        if getattr(sys, 'frozen', False): # Running as packaged exe
-            self.base_path = sys._MEIPASS 
-        else: # Running in development
-            self.base_path = os.path.dirname(os.path.dirname(__file__))
             
-        self.score_file = os.path.join(self.base_path, "highscores.json")
-        self.levels_file = os.path.join(self.base_path, "levels_unlocked.json")
+        self.score_path = get_base_path("highscores.json")
+        self.levels_path = get_base_path("levels_unlocked.json")
         
         self.load_scores()
         self.completed_levels = set()
@@ -21,8 +15,8 @@ class Scores:
 
     def load_scores(self):
         try:
-            if os.path.exists(self.score_file):
-                with open(self.score_file, 'r') as f:
+            if os.path.exists(self.score_path):
+                with open(self.score_path, 'r') as f:
                     self.scores = json.load(f)
             else:
                 self.scores = []
@@ -30,7 +24,7 @@ class Scores:
             self.scores = []
 
     def save_scores(self):
-        with open(self.score_file, 'w') as f:
+        with open(self.score_path, 'w') as f:
             json.dump(self.scores, f)
 
     def add_score(self, name, score):
@@ -50,8 +44,8 @@ class Scores:
     
     def load_completed_levels(self):
         try:
-            if os.path.exists(self.levels_file):
-                with open(self.levels_file, 'r') as f:
+            if os.path.exists(self.levels_path):
+                with open(self.levels_path, 'r') as f:
                     completed_levels = json.load(f)
                     self.completed_levels = set(int(level) if isinstance(level, str) else level for level in completed_levels)
             else:
@@ -61,7 +55,7 @@ class Scores:
 
     def save_completed_levels(self):
         try:
-            with open(self.levels_file, 'w') as f:
+            with open(self.levels_path, 'w') as f:
                 json.dump(list(self.completed_levels), f)
         except Exception as e:
             print(f"Error saving completed levels: {e}")

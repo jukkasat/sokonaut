@@ -9,8 +9,8 @@ a = Analysis(
     binaries=[],
     datas=[
         # Python modules
-        ('src/audio/*.ogg', 'src/audio'),
-        ('src/img/*.png', 'src/img'),
+        ('src/audio/*.ogg', 'audio'),
+        ('src/img/*.png', 'img'),
         ('src/utils/*.py', 'src/utils'),
         ('src/views/*.py', 'src/views'),
         ('src/*.py', 'src'),

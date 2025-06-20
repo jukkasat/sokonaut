@@ -10,7 +10,7 @@ class Renderer:
         self.display = display
         self.image_loader = ImageLoader(display)
         self.images = self.image_loader.images
-        self.font = pygame.font.SysFont("Arial", 24)
+        self.font = pygame.font.SysFont("bahnschrift", 24)
         self.ui_drawer = UIDrawer(display, game_state, self.font)
         self.game_won_view = GameWonView(display, game_state, self.font, self.image_loader, self.ui_drawer)
         self.level_won_view = LevelWonView(display, game_state, self.font, scores, self.ui_drawer)

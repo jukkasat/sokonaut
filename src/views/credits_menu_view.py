@@ -1,7 +1,7 @@
 import os
 import pygame
 from src.views.menu_base import MenuBase
-from src.utils.helper import center_text, center_rect
+from src.utils.helper import center_text, center_rect, get_base_path
 
 class CreditsMenu(MenuBase):
     def __init__(self, display, renderer, scores):
@@ -41,11 +41,10 @@ class CreditsMenu(MenuBase):
             self.display.blit(rendered_text, text_rect)
             y_pos += 20
 
-        # Load and draw tip image
         try:
-            tip_image = pygame.image.load(os.path.join(self._get_base_path(), "tip.png"))
-            # Scale image if needed (optional)
-            tip_image = pygame.transform.scale(tip_image, (280, 280))  # Adjust size as needed
+            # Load and draw tip image
+            tip_image = pygame.image.load(os.path.join(get_base_path("img"), "tip.png"))
+            tip_image = pygame.transform.scale(tip_image, (280, 280)) # Scale image
             
             # Center the image horizontally and place it below the text
             tip_rect = tip_image.get_rect()

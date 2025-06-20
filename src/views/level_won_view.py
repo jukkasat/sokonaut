@@ -8,7 +8,7 @@ class LevelWonView:
         self.font = font
         self.scores = scores
         self.ui_drawer = ui_drawer
-        self.large_font = pygame.font.SysFont("Arial", 36)
+        self.large_font = pygame.font.SysFont("bahnschrift", 36)
         self.next_level_rect = None
 
     def draw(self):

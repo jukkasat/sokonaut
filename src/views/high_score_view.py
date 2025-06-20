@@ -33,7 +33,7 @@ class HighScoresView(MenuBase):
             for i, score in enumerate(scores):
                 if i == 0:  # First place: Gold
                     color = (212, 175, 55)
-                    font = pygame.font.SysFont("Arial", 22)
+                    font = pygame.font.SysFont("bahnschrift", 22)
                 else:  # Other scores
                     color = (200, 200, 200)
                     font = self.menu_font_small
