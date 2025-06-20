@@ -15,16 +15,16 @@ def deep_copy_map(map_data):
     """Creates and returns a deep copy of the given map data."""
     return [row[:] for row in map_data]
 
-def get_base_path(subdir):
-    """Helper method to determine the correct directory or file path.
-    If subdir_or_file is a directory, returns the path to that directory.
-    If subdir_or_file is a json file (e.g. settings.json), returns the path to that file in the root.
+def get_base_path(name):
+    """Determine and return the correct directory or file path.
+    - PyInstaller: files are directly in the root directory (sys._MEIPASS)
+    - Development environment: root files (maps.json, etc.) can be found at the root of the project and folders (img, audio) under src
     """
-    if hasattr(sys, '_MEIPASS'):  # Running as PyInstaller bundle
-        base = sys._MEIPASS
-    else:
-        base = os.path.dirname(os.path.dirname(__file__)) # src/utils/helper.py -> src/utils -> src
-
-    if subdir.endswith(".json"):
-        return os.path.join(os.path.dirname(base), subdir)  # workspace root
-    return os.path.join(base, subdir)  # src/img tai src/audio
+    if hasattr(sys, '_MEIPASS'): # PyInstaller
+        return os.path.join(sys._MEIPASS, name)
+    else: # Dev: 
+        root = os.path.dirname(os.path.dirname(__file__))
+        if name.endswith('.json'):
+            return os.path.join(root, '..', name)
+        else:
+            return os.path.join(root, name)

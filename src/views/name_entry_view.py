@@ -14,9 +14,9 @@ class NameEntryView(MenuBase):
         menu_x, menu_y = center_rect(self.display, menu_width, self.display.get_height() // 2 - menu_height // 2)
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
-        text = self.menu_font_small.render("New High Score!", True, (210, 105, 30))
-        score_text = self.menu_font_small.render(f"Score: {self.score}", True, (200, 200, 200))
-        name_text = self.menu_font_small.render("Enter your name:", True, (200, 200, 200))
+        text = self.menu_font_small.render("new High Score!", True, (210, 105, 30))
+        score_text = self.menu_font_small.render(f"score: {self.score}", True, (200, 200, 200))
+        name_text = self.menu_font_small.render("enter your name:", True, (200, 200, 200))
         input_text = self.menu_font_small.render(self.current_name + "_", True, (200, 200, 200))
         
         text_rect = center_text(self.display, text, menu_y + 40)
