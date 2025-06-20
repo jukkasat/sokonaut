@@ -1,6 +1,6 @@
 import pygame
 from src.views.menu_base import MenuBase
-from src.utils.helper import center_text, get_base_path
+from src.utils.helper import center_text, get_audio_icons
 
 class MainMenu(MenuBase):
     def __init__(self, display, renderer, scores):
@@ -11,18 +11,7 @@ class MainMenu(MenuBase):
         self.menu_font_small = pygame.font.SysFont("bahnschrift", 24)
         self.menu_item_rects = [] # Store menu item positions for mouse interaction
         self.music_icon_rect = None
-
-        # Load music control icons
-        try:
-            self.audio_on_icon = pygame.image.load(get_base_path("img") + "/audio_on.png")
-            self.audio_off_icon = pygame.image.load(get_base_path("img") + "/audio_off.png")
-            icon_size = (74, 74)  # size
-            self.audio_on_icon = pygame.transform.scale(self.audio_on_icon, icon_size)
-            self.audio_off_icon = pygame.transform.scale(self.audio_off_icon, icon_size)
-        except:
-            print("Could not load music control icons")
-            self.audio_on_icon = None
-            self.audio_off_icon = None
+        self.audio_on_icon, self.audio_off_icon = get_audio_icons()
 
     def draw(self):
         # Clear the screen
@@ -51,11 +40,10 @@ class MainMenu(MenuBase):
             pos = (self.display.get_width() // 2 - text.get_width() // 2, 250 + i * 50)
             self.menu_item_rects.append(text.get_rect(topleft=pos))
             self.display.blit(text, pos)
-        
+
+        # Draw an audio control in the bottom right corner
         audio_on = self.renderer.game_state.audio_manager.sound_enabled
-        # Draw music control icon in bottom right corner
-        if self.audio_on_icon and self.audio_off_icon:
-            icon = self.audio_on_icon if audio_on else self.audio_off_icon
-            icon_pos = (self.display.get_width() - 110, self.display.get_height() - 110)
-            self.music_icon_rect = icon.get_rect(topleft=icon_pos)
-            self.display.blit(icon, icon_pos)
+        icon = self.audio_on_icon if audio_on else self.audio_off_icon
+        icon_pos = (self.display.get_width() - 105, self.display.get_height() - 120)
+        self.music_icon_rect = icon.get_rect(topleft=icon_pos)
+        self.display.blit(icon, icon_pos)

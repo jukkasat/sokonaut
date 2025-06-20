@@ -64,6 +64,15 @@ class GamePlayingState(State):
                 if self.sokonaut.renderer.ui_drawer.quit_rect and \
                 self.sokonaut.renderer.ui_drawer.quit_rect.collidepoint((x, y)):
                     return self._return_to_menu()
+                
+                # Audio-control clicks
+                if self.sokonaut.renderer.music_icon_rect and self.sokonaut.renderer.music_icon_rect.collidepoint((x, y)):
+                    audio_manager = self.sokonaut.audio_manager
+                    audio_manager.toggle_audio(not audio_manager.sound_enabled)
+                    if audio_manager.sound_enabled:
+                        audio_manager.play_music("level")
+                        audio_manager.play_sound("select")
+                    return None
             
         if self.sokonaut.game_state.game_completed():
             return "game_completed"
