@@ -3,6 +3,7 @@ from src.utils.image_loader import ImageLoader
 from src.utils.ui_drawer import UIDrawer
 from src.views.game_won_view import GameWonView
 from src.views.level_won_view import LevelWonView
+from src.utils.helper import get_audio_icons
 
 class Renderer:
     def __init__(self, game_state, display, scores):
@@ -30,6 +31,9 @@ class Renderer:
         # Store the previous map dimensions to detect changes
         self.prev_map_width = self.game_state.width
         self.prev_map_height = self.game_state.height
+
+        self.music_icon_rect = None
+        self.audio_on_icon, self.audio_off_icon = get_audio_icons()        
 
     def _scale_images(self):
         """Scale all images and return them in a list"""
@@ -92,6 +96,13 @@ class Renderer:
                 pos_x = self.offset_x + (x * self.tile_size)
                 pos_y = self.offset_y + (y * self.tile_size)
                 self.display.blit(self.scaled_images[tile], (pos_x, pos_y))
+
+        # Draw an audio control in the bottom right corner
+        audio_on = self.game_state.audio_manager.sound_enabled
+        icon = self.audio_on_icon if audio_on else self.audio_off_icon
+        icon_pos = (self.display.get_width() - 100, self.display.get_height() - 130)
+        self.music_icon_rect = icon.get_rect(topleft=icon_pos)
+        self.display.blit(icon, icon_pos)
 
         self.ui_drawer.draw_ui()
 

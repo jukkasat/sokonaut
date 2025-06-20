@@ -1,5 +1,6 @@
 import os
 import sys
+import pygame
 
 def center_text(surface, text, y):
     """Centers text horizontally on the surface at the given y-coordinate."""
@@ -28,3 +29,17 @@ def get_base_path(name):
             return os.path.join(root, '..', name)
         else:
             return os.path.join(root, name)
+        
+def get_audio_icons():
+    try:
+        audio_on_icon = pygame.image.load(get_base_path("img") + "/audio_on.png")
+        audio_off_icon = pygame.image.load(get_base_path("img") + "/audio_off.png")
+        icon_size = (74, 74)
+        audio_on_icon = pygame.transform.scale(audio_on_icon, icon_size)
+        audio_off_icon = pygame.transform.scale(audio_off_icon, icon_size)
+    except:
+        print("Could not load music control icons")
+        audio_on_icon = None
+        audio_off_icon = None
+
+    return audio_on_icon, audio_off_icon
