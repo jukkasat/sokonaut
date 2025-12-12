@@ -22,13 +22,15 @@ class CreditsMenu(MenuBase):
 
         # Create credits view background
         menu_width = 400
-        menu_height = 470
+        menu_height = 500
         menu_x, menu_y = center_rect(self.display, menu_width, 170)
         self.draw_menu_background(menu_width, menu_height, menu_x, menu_y)
 
         # Draw credits text
         credits_text = [
             "developer",
+            "jukkas",
+            "music and sounds",
             "jukkas",
             "",
             "For more games donate with Bolt 12"
