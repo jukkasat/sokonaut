@@ -2,6 +2,8 @@
 
 Sokonaut is a puzzle game where the player navigates through levels, solving challenges to progress. The game features a variety of mechanics, including scoring, level unlocking, and more.
 
+<img width="2555" height="1436" alt="sokonaut_preview" src="https://github.com/user-attachments/assets/70efd3fb-045a-464f-8db6-72eac1f568ae" />
+
 ## Features
 
 - **GameState**: Manages the game's state, levels, and logic.
